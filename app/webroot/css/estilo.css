@@ -1,0 +1,99 @@
+@font-face{
+	font-family: 3Dumb;
+	src: url(../resources/default/fontes/3Dumb.ttf) format("truetype");
+	font-weight:normal;
+   	font-style:normal;
+}
+
+html, body {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+}
+
+#geral {
+	width: 998px;
+	margin: auto;
+	text-align: left;
+}
+
+#cabecalho {
+	padding: 5px; 
+	background-color:#666972; 
+	height: 50px;
+}
+
+#cabecalho .btn-fblogin {
+	display: inline-table;
+	height: 100%;
+	margin-right: 15px;
+}
+
+#cabecalho .btn-fblogin .fb-login-button {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#corpo {
+	min-height: 300px;
+	height: 500px;
+	border: solid 1px;
+	margin-top: 5px;
+}
+
+#rodape {
+	background-color: #EEE;
+	text-align: center;
+	padding: 5px;
+	height: 100px;
+	border: solid 1px;
+	margin-top: 5px;
+	/* clear: right; */
+}
+
+.banner-principal {
+	height: 300px;
+	text-align: center;
+	margin-top: 1ex;
+	margin-bottom: 1ex;
+}
+
+.logo{
+	font-family: 3Dumb;
+	font-size: 30px;
+	color: white;	
+}
+
+#lateral{
+	width: 200px;
+	height: 500px;
+	border: solid 1px;
+	margin-top: 5px;
+}
+
+#conteudo{
+	width: 790px;
+	height: 500px;
+	border: solid 1px;
+	margin-top: 5px;
+}
+
+/*-----------------------------------
+Classes utilitárias
+-------------------------------------*/
+
+.float-right {
+	float: right;
+}
+
+.float-left {
+	float: left;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+div.clear {
+	clear: both;
+}
