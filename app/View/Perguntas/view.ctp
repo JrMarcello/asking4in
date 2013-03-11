@@ -4,8 +4,8 @@
 
 <div class="respostas form">
     <?php
-    echo $this->Form->create('Resposta', array('action' => 'add'));
-    echo $this->Form->input('conteudo', array('label' => 'Resposta'));
+    echo $this->Form->create('Resposta', array('action' => 'add', 'inputDefaults' => Configure::read('Form.Defaults')));
+    echo $this->Form->input('conteudo', array('label' => 'Resposta', 'type' => 'textarea'));
     echo $this->Form->input('pergunta_id', array('type' => 'hidden', 'value' => $pergunta['Pergunta']['id']));
 
     echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn'));

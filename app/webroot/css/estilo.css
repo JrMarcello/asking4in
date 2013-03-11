@@ -58,8 +58,8 @@
     /*width: 190px;*/
     min-height: 300px;
     /*border: solid 1px;*/
-    /*margin-top: 5px;*/
-    background: #EEE;
+    margin-top: 5px;
+    /*background: #EEE;*/
 }
 
 #footer {
@@ -78,12 +78,27 @@
     margin-bottom: 1ex;
 }
 
-.logo{
+/*.logo{
     font-family: 3Dumb;
     font-size: 30px;
     color: white;	
+}*/
+
+.btn-fb-login {
+    height: 25px;
+    margin-top: 5px;
 }
 
-#btn-fblogin {
-    float: right;
+/*------------------------------
+Formulários
+------------------------------*/
+.error-message {
+    display: inline-block;
+    padding-left: 1em;
+}
+
+form div.error input.form-error {
+    /*background-color: #F2DEDE;*/
+    border-color: #E9322D;
+    box-shadow: 0 0 6px #F8B9B7;
 }

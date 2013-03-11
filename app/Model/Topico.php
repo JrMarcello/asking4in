@@ -15,8 +15,37 @@ class Topico extends AppModel {
  */
 	public $displayField = 'nome';
 
-
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
+/**
+ * Validation rules
+ *
+ * @var array
+ */
+	public $validate = array(
+		'nome' => array(
+			'notempty' => array(
+				'rule' => 'notempty',
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				'required' => true,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+            'unique' => array(
+                'rule' => 'isUnique',
+                'message' => 'Nome do tópico deve ser único',
+            )
+		),
+		'tema_id' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+	);
 
 /**
  * belongsTo associations
@@ -53,5 +82,19 @@ class Topico extends AppModel {
 			'counterQuery' => ''
 		)
 	);
+    
+    public function sidebar() {
+        $this->contain(array(
+            'Pergunta' => array(
+                'order' => 'Pergunta.created',
+                'limit' => 3
+            )
+        ));
+        
+        return $this->find('all', array(
+            'order' => 'Created',
+            'limit' => 3
+        ));
+    }
 
 }

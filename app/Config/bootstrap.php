@@ -109,3 +109,14 @@ CakeLog::config('error', array(
 ));
 
 CakePlugin::load('DebugKit');
+
+/**
+ * Padrões do formulário
+ */
+Configure::write('Form.Defaults', array(
+        'error' => array(
+            'attributes' => array('class' => 'error-message text-error help-inline')
+        ),
+        'class' => 'input-xlarge'
+    )
+);

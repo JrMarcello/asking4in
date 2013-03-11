@@ -17,9 +17,9 @@ class TopicoTest extends CakeTestCase {
 		'app.tema',
 		'app.grupo',
 		'app.usuario',
-		'app.grupos_usuario',
 		'app.pergunta',
-		'app.resposta'
+		'app.resposta',
+		'app.grupos_usuario'
 	);
 
 /**
