@@ -17,7 +17,7 @@ class PerguntasController extends AppController {
      */
     public function index() {
         if (!empty($this->request->query['search'])) {
-            $search = $this->request->query['search'];
+            $search = trim($this->request->query['search']);
             $this->paginate = array(
                 'conditions' => array(
                     'OR' => array(
@@ -33,9 +33,9 @@ class PerguntasController extends AppController {
     }
     
     public function typeahead() {
-//        if (!$this->request->is('ajax')) {
-//            $this->redirect(array('action' => 'index'));
-//        }
+        if (!$this->request->is('ajax')) {
+            $this->redirect(array('action' => 'index'));
+        }
         $this->autoRender = false;
         $this->RequestHandler->respondAs('json');
         
