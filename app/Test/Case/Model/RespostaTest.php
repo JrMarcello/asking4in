@@ -16,7 +16,10 @@ class RespostaTest extends CakeTestCase {
 		'app.resposta',
 		'app.pergunta',
 		'app.usuario',
-		'app.topico'
+		'app.grupo',
+		'app.tema',
+		'app.topico',
+		'app.grupos_usuario'
 	);
 
 /**

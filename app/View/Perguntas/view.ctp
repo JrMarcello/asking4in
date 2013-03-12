@@ -1,11 +1,12 @@
 <div class="perguntas view">
-    <h3><?php echo h($pergunta['Pergunta']['conteudo']); ?></h3>
+    <h3><?php echo h($pergunta['Pergunta']['titulo']); ?></h3>
+    <p><?php echo h($pergunta['Pergunta']['conteudo']); ?></p>
 </div>
 
 <div class="respostas form">
     <?php
-    echo $this->Form->create('Resposta', array('action' => 'add', 'inputDefaults' => Configure::read('Form.Defaults')));
-    echo $this->Form->input('conteudo', array('label' => 'Resposta', 'type' => 'textarea'));
+    echo $this->Form->create('Resposta', array_merge(array('action' => 'add'), Configure::read('Form.Options')));
+    echo $this->Form->input('conteudo', array('label' => 'Enviar Resposta', 'type' => 'textarea'));
     echo $this->Form->input('pergunta_id', array('type' => 'hidden', 'value' => $pergunta['Pergunta']['id']));
 
     echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn'));

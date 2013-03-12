@@ -41,9 +41,9 @@ class RespostasController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Resposta->create();
 			if ($this->Resposta->save($this->request->data)) {
-				$this->Session->setFlash(__('The resposta has been saved'));
+				$this->Session->setFlash(__('Sua resposta foi enviada.'), 'alerts/success');
 			} else {
-				$this->Session->setFlash(__('The resposta could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('A resposta não pode ser enviada.'), 'alerts/error');
 			}
 		}
 		$this->redirect(array(
@@ -66,10 +66,10 @@ class RespostasController extends AppController {
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Resposta->save($this->request->data)) {
-				$this->Session->setFlash(__('The resposta has been saved'));
+				$this->Session->setFlash(__('The resposta has been saved'), 'alerts/success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The resposta could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The resposta could not be saved. Please, try again.'), 'alerts/error');
 			}
 		} else {
 			$options = array('conditions' => array('Resposta.' . $this->Resposta->primaryKey => $id));
@@ -95,10 +95,10 @@ class RespostasController extends AppController {
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Resposta->delete()) {
-			$this->Session->setFlash(__('Resposta deleted'));
+			$this->Session->setFlash(__('Resposta deleted'), 'alerts/success');
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('Resposta was not deleted'));
+		$this->Session->setFlash(__('Resposta was not deleted'), 'alerts/error');
 		$this->redirect(array('action' => 'index'));
 	}
 }

@@ -67,10 +67,10 @@ class TopicosController extends AppController {
         }
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Topico->save($this->request->data)) {
-                $this->Session->setFlash(__('The topico has been saved'));
+                $this->Session->setFlash(__('The topico has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'));
+                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'), 'alerts/error');
             }
         } else {
             $options = array('conditions' => array('Topico.' . $this->Topico->primaryKey => $id));
@@ -95,10 +95,10 @@ class TopicosController extends AppController {
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->Topico->delete()) {
-            $this->Session->setFlash(__('Topico deleted'));
+            $this->Session->setFlash(__('Topico deleted'), 'alerts/success');
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Topico was not deleted'));
+        $this->Session->setFlash(__('Topico was not deleted'), 'alerts/error');
         $this->redirect(array('action' => 'index'));
     }
 
@@ -136,10 +136,10 @@ class TopicosController extends AppController {
         if ($this->request->is('post')) {
             $this->Topico->create();
             if ($this->Topico->save($this->request->data)) {
-                $this->Session->setFlash(__('The topico has been saved'));
+                $this->Session->setFlash(__('The topico has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'));
+                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'), 'alerts/error');
             }
         }
         $temas = $this->Topico->Tema->find('list');
@@ -159,10 +159,10 @@ class TopicosController extends AppController {
         }
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Topico->save($this->request->data)) {
-                $this->Session->setFlash(__('The topico has been saved'));
+                $this->Session->setFlash(__('The topico has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'));
+                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'), 'alerts/error');
             }
         } else {
             $options = array('conditions' => array('Topico.' . $this->Topico->primaryKey => $id));
@@ -187,10 +187,10 @@ class TopicosController extends AppController {
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->Topico->delete()) {
-            $this->Session->setFlash(__('Topico deleted'));
+            $this->Session->setFlash(__('Topico deleted'), 'alerts/success');
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Topico was not deleted'));
+        $this->Session->setFlash(__('Topico was not deleted'), 'alerts/error');
         $this->redirect(array('action' => 'index'));
     }
 
