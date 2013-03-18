@@ -106,6 +106,7 @@ CakeLog::config('error', array(
 ));
 
 CakePlugin::load('DebugKit');
+CakePlugin::load('Facebook');
 
 /**
  * Padrões do formulário

@@ -1,5 +1,5 @@
 <div class="topicos form">
-<?php echo $this->Form->create('Topico', array('inputDefaults' => Configure::read('Form.Defaults'))); ?>
+<?php echo $this->Form->create('Topico', Configure::read('Form.Options')); ?>
 	<fieldset>
 		<legend><?php echo __('Adicionar Tópico'); ?></legend>
 	<?php

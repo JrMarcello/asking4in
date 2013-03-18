@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:fb="http://ogp.me/ns/fb#">
+<?php echo $this->Facebook->html(); ?>
     <head>
         <?php echo $this->Html->charset(); ?>
         <title>
@@ -9,7 +9,7 @@
         <?php
         echo $this->Html->meta('icon');
 
-        echo $this->Html->script('fb_home');
+        // echo $this->Html->script('fb_home');
         echo $this->Html->script('jquery-1.9.1.min');
         echo $this->Html->script('bootstrap.min');
 
@@ -24,7 +24,7 @@
         
     </head>
     <body>
-        <?php echo $this->element('facebook-jssdk'); ?>
+        <?php // echo $this->element('facebook-jssdk'); ?>
         <?php echo $this->element('navbar'); ?>
         <div id="wrap">
             <div id="container" class="container-fluid">
@@ -48,4 +48,5 @@
         </div>
         <?php # echo $this->element('sql_dump'); ?>
     </body>
+    <?php echo $this->Facebook->init(); ?>
 </html>

@@ -9,6 +9,11 @@
 /dist
 /tags
 
+# Ignorar arquivo de configuração do Facebook     #
+# Contém informação sensível (App ID, App Secret) #
+###################################################
+/app/Config/facebook.php
+
 # OS generated files #
 ######################
 .DS_Store

@@ -56,8 +56,8 @@
             </div>
             <?php echo $this->Form->end(); ?>
 
-            <p class="navbar-text pull-right btn-fb-login">
-            <fb:login-button class="fb-login-button" autologoutlink="true" show-faces="false" width="200" max-rows="1" size="large" />
+            <p class="navbar-text pull-right">
+                <?php echo $this->Facebook->login(array('show-faces' => false, 'perms' => 'email')); ?>
             </p>
         </div>
     </div>
