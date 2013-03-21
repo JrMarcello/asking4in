@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application level Controller
  *
@@ -32,12 +33,51 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-    public $components = array('Session', 'DebugKit.Toolbar', 'Facebook.Connect');
+    public $components = array('Session', 'DebugKit.Toolbar',
+        'Auth' => array(
+            'loginAction' => array(
+                'controller' => 'usuarios',
+                'action' => 'login'
+            ),
+            'authenticate' => array(
+                'Form' => array(
+                    'userModel' => 'Usuario',
+                    'fields' => array('username' => 'email')
+                )
+            ),
+            'authorize' => 'Controller'
+        ),
+        'Facebook.Connect' => array('model' => 'Usuario')
+    );
     public $helpers = array('Facebook.Facebook');
+    
+    public function isAuthorized($user = null) {
+        return true;
+    }
+    
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow();
+    }
     
     public function beforeRender() {
         parent::beforeRender();
         $Topico = ClassRegistry::init('Topico');
         $this->set('topicosSidebar', $Topico->sidebar());
     }
+    
+    public function beforeFacebookSave() {
+        $this->Connect->authUser['Usuario']['email'] = $this->Connect->user('email');
+        $this->Connect->authUser['Usuario']['nome'] = $this->Connect->user('name');
+        
+        return true;
+    }
+    
+    public function beforeFacebookLogin($user) {
+        $user['Usuario']['nome'] = $this->Connect->user('name');
+        $user['Usuario']['email'] = $this->Connect->user('email');
+        
+        return $user;
+    }
+
 }
