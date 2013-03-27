@@ -60,7 +60,7 @@
                 <?php if (!$this->Session->check('Auth.User')): ?>
                     <?php echo $this->Facebook->login(array('show-faces' => false, 'perms' => 'email, user_groups', 'redirect' => Router::url(array('controller' => 'usuarios', 'action' => 'login'), true), 'label' => 'Login')); ?>
                 <?php else: ?>
-                    Logado como <?php echo $this->Session->read('FB.Me.name'); ?>
+                    Logado como <?php echo $this->Session->read('Auth.User.nome'); ?>
                     <?php echo $this->Facebook->logout(array('redirect' => Router::url(array('controller' => 'usuarios', 'action' => 'logout'), true), 'label' => 'Logout')); ?>
                 <?php endif; ?>
             </p>

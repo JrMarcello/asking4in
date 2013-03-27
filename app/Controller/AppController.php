@@ -42,7 +42,7 @@ class AppController extends Controller {
             'authenticate' => array(
                 'Form' => array(
                     'userModel' => 'Usuario',
-                    'fields' => array('username' => 'email')
+                    'fields' => array('username' => 'email', 'password' => 'senha')
                 )
             ),
             'authorize' => 'Controller'
@@ -58,6 +58,7 @@ class AppController extends Controller {
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow();
+        
     }
     
     public function beforeRender() {
@@ -71,13 +72,6 @@ class AppController extends Controller {
         $this->Connect->authUser['Usuario']['nome'] = $this->Connect->user('name');
         
         return true;
-    }
-    
-    public function beforeFacebookLogin($user) {
-        $user['Usuario']['nome'] = $this->Connect->user('name');
-        $user['Usuario']['email'] = $this->Connect->user('email');
-        
-        return $user;
     }
 
 }
