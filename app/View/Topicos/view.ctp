@@ -19,25 +19,21 @@
     </dl>
 </div>
 <div class="related">
-    <h3><?php echo __('Perguntas deste Tópico'); ?></h3>
-    <?php if (!empty($topico['Pergunta'])): ?>
-        <table class="table table-bordered table-striped table-hover">
+    <h3><?php echo __('Perguntas neste Tópico'); ?></h3>
+    <?php if (!empty($perguntas)): ?>
+    <div class="span6">
+        <table class="table">
+            <?php foreach ($perguntas as $pergunta): ?>
             <tr>
-                <th><?php echo __('Conteudo'); ?></th>
-                <th><?php echo __('Usuario'); ?></th>
-            </tr>
-            <?php foreach ($topico['Pergunta'] as $pergunta): ?>
-                <tr>
-                <td><?php echo $this->Html->link(h($pergunta['conteudo']), array('controller' => 'perguntas', 'action' => 'view', $pergunta['id'])); ?>&nbsp;</td>
                 <td>
-                    <?php echo $this->Html->link($pergunta['Usuario']['nome'], array('controller' => 'usuarios', 'action' => 'view', $pergunta['Usuario']['id'])); ?>
+                    <?php echo $this->Html->link(h($pergunta['Pergunta']['titulo']),
+                            array('controller' => 'perguntas', 'action' => 'view', $pergunta['Pergunta']['id'])); ?>&nbsp;
                 </td>
             </tr>
             <?php endforeach; ?>
         </table>
-    <?php endif; ?>
-
-    <div class="actions">
-        <?php // echo $this->Html->link(__('Perguntar neste Tópico'), array('controller' => 'perguntas', 'action' => 'add'), array('class' => 'btn'));  ?>
+        
+        <?= $this->element('pagination') ?>
     </div>
+    <?php endif; ?>
 </div>

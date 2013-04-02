@@ -22,6 +22,7 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::uses('Controller', 'Controller');
+App::uses('FB', 'Facebook.Lib');
 
 /**
  * Application Controller
@@ -58,13 +59,13 @@ class AppController extends Controller {
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow();
-        
     }
     
     public function beforeRender() {
         parent::beforeRender();
         $Topico = ClassRegistry::init('Topico');
         $this->set('topicosSidebar', $Topico->sidebar());
+        $this->set('isLogged', $this->Auth->loggedIn());
     }
     
     public function beforeFacebookSave() {
@@ -72,6 +73,11 @@ class AppController extends Controller {
         $this->Connect->authUser['Usuario']['nome'] = $this->Connect->user('name');
         
         return true;
+    }
+    
+    public function afterFacebookLogin() {
+        $user_groups = FB::api('/me/groups');
+        $this->Session->write('FB.user_groups', $user_groups['data']);
     }
 
 }

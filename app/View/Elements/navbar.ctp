@@ -19,7 +19,7 @@
             <span class="icon-bar"></span>
         </a>
 
-        <?php echo $this->Html->link('Asking4in', '/', array('class' => 'brand')); ?>
+        <?php echo $this->Html->link('Ask4in', '/', array('class' => 'brand')); ?>
 
         <div class="nav-collapse collapse">
             <ul class="nav">
@@ -57,7 +57,7 @@
             <?php echo $this->Form->end(); ?>
 
             <p class="navbar-text pull-right">
-                <?php if (!$this->Session->check('Auth.User')): ?>
+                <?php if (!$isLogged): ?>
                     <?php echo $this->Facebook->login(array('show-faces' => false, 'perms' => 'email, user_groups', 'redirect' => Router::url(array('controller' => 'usuarios', 'action' => 'login'), true), 'label' => 'Login')); ?>
                 <?php else: ?>
                     Logado como <?php echo $this->Session->read('Auth.User.nome'); ?>

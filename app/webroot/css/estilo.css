@@ -42,6 +42,15 @@ Formulários
     padding-left: 1em;
 }
 
+/*------------------------------
+Respostas
+------------------------------*/
+
+p.conteudo_resposta {
+    font-size: small;
+    text-align: justify;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 

@@ -3,7 +3,7 @@
     <head>
         <?php echo $this->Html->charset(); ?>
         <title>
-            Asking4in: <?php echo $title_for_layout; ?>
+            Ask4in: <?php echo $title_for_layout; ?>
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php

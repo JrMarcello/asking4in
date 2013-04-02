@@ -30,9 +30,13 @@ class TopicosController extends AppController {
         if (!$this->Topico->exists($id)) {
             throw new NotFoundException(__('Invalid topico'));
         }
-        $options = array('conditions' => array('Topico.' . $this->Topico->primaryKey => $id));
-        $this->Topico->contain(array('Pergunta' => array('Usuario')), 'Tema');
+        $options = array(
+            'conditions' => array('Topico.id' => $id),
+            'contain' => array('Tema')
+        );
+        
         $this->set('topico', $this->Topico->find('first', $options));
+        $this->set('perguntas', $this->paginate('Pergunta'));
     }
 
     /**

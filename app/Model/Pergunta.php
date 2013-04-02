@@ -105,5 +105,11 @@ class Pergunta extends AppModel {
 			'counterQuery' => ''
 		)
 	);
+    
+    public function beforeValidate($options = array()) {
+        parent::beforeValidate($options);
+        
+        $this->data['Pergunta']['usuario_id'] = AuthComponent::user('id');
+    }
 
 }

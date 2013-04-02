@@ -16,16 +16,17 @@ class PerguntasController extends AppController {
      * @return void
      */
     public function index() {
+        $this->paginate = array('limit' => 1);
         if (!empty($this->request->query['search'])) {
             $search = trim($this->request->query['search']);
-            $this->paginate = array(
+            $this->paginate = array_merge($this->paginate, array(
                 'conditions' => array(
                     'OR' => array(
                         'Pergunta.titulo LIKE' => "%$search%",
                         'Pergunta.conteudo LIKE' => "%$search%"
                     )
                 )
-            );
+            ));
             $this->set('search', $search);
         }
         $this->Pergunta->recursive = 0;
@@ -60,11 +61,19 @@ class PerguntasController extends AppController {
         if (!$this->Pergunta->exists($id)) {
             throw new NotFoundException(__('Invalid pergunta'));
         }
+        
         $options = array(
             'conditions' => array('Pergunta.' . $this->Pergunta->primaryKey => $id),
-            'recursive' => 2
+            'contains' => false,
+            'recursive' => 0
         );
+        
+        $this->paginate = array(
+            'conditions' => array('Resposta.pergunta_id' => $id)
+        );
+        
         $this->set('pergunta', $this->Pergunta->find('first', $options));
+        $this->set('respostas', $this->paginate('Resposta'));
     }
 
     /**

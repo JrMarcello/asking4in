@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('AuthComponent', 'Controller/Component');
 /**
  * Resposta Model
  *
@@ -26,7 +27,7 @@ class Resposta extends AppModel {
 				'rule' => array('notempty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
-				'required' => false,
+				'required' => true,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
@@ -43,7 +44,7 @@ class Resposta extends AppModel {
 		),
 		'usuario_id' => array(
 			'notempty' => array(
-				//'rule' => array('notempty'),
+				'rule' => array('notempty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -77,7 +78,9 @@ class Resposta extends AppModel {
 		)
 	);
     
-    public function add($data) {
-        return $this->save($data);
+    public function beforeValidate($options = array()) {
+        parent::beforeValidate($options);
+        
+        $this->data['Resposta']['usuario_id'] = AuthComponent::user('id');
     }
 }
