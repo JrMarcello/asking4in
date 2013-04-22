@@ -9,13 +9,59 @@ App::uses('AppController', 'Controller');
  */
 class UsuariosController extends AppController {
     
+    public $components = array('SignedRequest');
+    
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('ajaxlogin');
+    }
+    
     public function login() {
         $this->redirect('/');
     }
     
+    public function ajaxlogin() {
+        if ($this->request->is('ajax')) {
+            $this->layout = 'ajax';
+            $this->autoRender = false;
+            
+            $facebook_id = $this->request->data['response']['authResponse']['userID'];
+            $facebook_id_check = $this->SignedRequest->decode(
+                $this->request->data['response']['authResponse']['signedRequest']
+            )['user_id'];
+            
+            if ($facebook_id != $facebook_id_check) {
+                $this->Session->setFlash('Login Falhou', 'alerts/error');
+            }
+            
+            $user= $this->Usuario->findByFacebookId($facebook_id);
+            
+            $login = $this->Auth->login(array(
+                'id' => $user['Usuario']['id'],
+                'facebook_id' => $user['Usuario']['facebook_id'],
+                'nome' => $user['Usuario']['nome'],
+                'email' => $user['Usuario']['email']
+            ));
+            
+            exit($this->request->referer());
+        }
+    }
+    
+    public function ajaxgroups() {
+        if ($this->request->is('ajax')) {
+            $this->layout = 'ajax';
+            $this->autoRender = false;
+            
+            if ($this->Auth->loggedIn()) {
+                $this->Usuario->grupos($this->request->data['groups'], $this->Auth->user('id'));
+            }
+            
+            exit;
+        }
+    }
+    
     public function logout() {
         $this->Auth->logout();
-        $this->Session->destroy();
         $this->redirect('/');
     }
 

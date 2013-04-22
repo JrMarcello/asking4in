@@ -4,6 +4,7 @@
     <small class="muted"><?= h($pergunta['Usuario']['nome']); ?></small>
 </div>
 
+<?php if ($isLogged): ?>
 <div class="respostas form">
     <?php
     echo $this->Form->create('Resposta', array_merge(array('action' => 'add'), Configure::read('Form.Options')));
@@ -13,6 +14,11 @@
     echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn'));
     ?>
 </div>
+<?php else: ?>
+<div class="clearfix">&nbsp;</div>
+<div class="alert alert-info span8">Faça login para enviar sua resposta</div>
+<div class="clearfix"></div>
+<?php endif; ?>
 
 <div class="related respostas">
     <h5><?php echo __('Respostas'); ?></h5>

@@ -22,6 +22,7 @@
         <?php echo $this->Html->link('Ask4in', '/', array('class' => 'brand')); ?>
 
         <div class="nav-collapse collapse">
+            <?php if ($isLogged): ?>
             <ul class="nav">
                 <?php
                 if ($this->request->controller == 'perguntas' && $this->request->action == 'add'):
@@ -32,7 +33,8 @@
                 ?>
                 <li <?php echo $liClass; ?>><?php echo $this->Html->link('Perguntar', array('controller' => 'perguntas', 'action' => 'add')); ?></li>
             </ul>
-
+            <?php endif; ?>
+            
             <?php echo $this->Form->create('Pergunta',
                     array('class' => 'form-search navbar-search', 'action' => 'index', 'type' => 'get')); ?>
             <div class="input-append">
@@ -58,10 +60,11 @@
 
             <p class="navbar-text pull-right">
                 <?php if (!$isLogged): ?>
-                    <?php echo $this->Facebook->login(array('show-faces' => false, 'perms' => 'email, user_groups', 'redirect' => Router::url(array('controller' => 'usuarios', 'action' => 'login'), true), 'label' => 'Login')); ?>
+                    <a href="#" class="facebook_login_link">Login</a>
                 <?php else: ?>
-                    Logado como <?php echo $this->Session->read('Auth.User.nome'); ?>
-                    <?php echo $this->Facebook->logout(array('redirect' => Router::url(array('controller' => 'usuarios', 'action' => 'logout'), true), 'label' => 'Logout')); ?>
+                    Logado como <?php echo AuthComponent::user('nome'); ?>
+                    <?php echo $this->Html->link('Logout', array('controller' => 'usuarios', 'action' => 'logout')) ?>
+                    <?php // echo $this->Facebook->logout(array('redirect' => Router::url(array('controller' => 'usuarios', 'action' => 'logout'), true), 'label' => 'Logout')); ?>
                 <?php endif; ?>
             </p>
         </div>

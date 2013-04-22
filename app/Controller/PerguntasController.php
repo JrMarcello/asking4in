@@ -9,6 +9,10 @@ App::uses('AppController', 'Controller');
  */
 class PerguntasController extends AppController {
     public $components = array('RequestHandler');
+    
+    public function beforeFilter() {
+        parent::beforeFilter();
+    }
 
     /**
      * index method
@@ -16,7 +20,6 @@ class PerguntasController extends AppController {
      * @return void
      */
     public function index() {
-        $this->paginate = array('limit' => 1);
         if (!empty($this->request->query['search'])) {
             $search = trim($this->request->query['search']);
             $this->paginate = array_merge($this->paginate, array(

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<?php echo $this->Facebook->html(); ?>
+<html>
     <head>
         <?php echo $this->Html->charset(); ?>
         <title>
@@ -9,8 +9,8 @@
         <?php
         echo $this->Html->meta('icon');
 
-        // echo $this->Html->script('fb_home');
-        echo $this->Html->script('jquery-1.9.1.min');
+        //echo $this->Html->script('jquery-1.9.1.min');
+        echo $this->Html->script("http://code.jquery.com/jquery-1.9.1.js");
         echo $this->Html->script('bootstrap.min');
 
         echo $this->Html->css('bootstrap.min');
@@ -24,7 +24,7 @@
         
     </head>
     <body>
-        <?php // echo $this->element('facebook-jssdk'); ?>
+        <?php echo $this->element('facebook'); ?>
         <?php echo $this->element('navbar'); ?>
         <div id="wrap">
             <div id="container" class="container-fluid">
@@ -46,7 +46,5 @@
                 &nbsp;
             </div>
         </div>
-        <?php # echo $this->element('sql_dump'); ?>
     </body>
-    <?php echo $this->Facebook->init(); ?>
 </html>

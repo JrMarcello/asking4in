@@ -106,7 +106,6 @@ CakeLog::config('error', array(
 ));
 
 CakePlugin::load('DebugKit');
-CakePlugin::load('Facebook');
 
 /**
  * Padrões do formulário
@@ -123,3 +122,8 @@ Configure::write('Form.Options', array(
         'error' => array('attributes' => array('wrap' => 'span', 'class' => 'help-inline')),
     )
 ));
+
+/**
+ * Carrega as configurações do facebook
+ */
+Configure::load('facebook');
