@@ -18,7 +18,7 @@ $app_id = Configure::read('Facebook.appId');
                 FB.api('/me/groups', function(data) {
                     var groups = [];
                     for (var i = 0; i < data.data.length; i++) {
-                        if (data.data[i].name.match(/^\[ASK4In\]/)) {
+                        if (data.data[i].name.match(/^\[ASK4In\]/) != null) {
                             groups.push(data.data[i]);
                         }
                     }

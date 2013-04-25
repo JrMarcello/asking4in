@@ -1,20 +1,20 @@
-<h4>Tópicos recentes</h4>
+<h4>Grupos recentes</h4>
 <ul class="nav nav-list" id="side-menu">
-    <?php foreach ($topicosSidebar as $topico): ?>
-        <li class="nav-header"><?php echo $topico['Topico']['nome']; ?></li>
-        <?php foreach ($topico['Pergunta'] as $pergunta): ?>
+    <?php foreach ($gruposSidebar as $grupo): ?>
+        <li class="nav-header"><?php echo $grupo['Grupo']['nome']; ?></li>
+        <?php foreach ($grupo['Tema'] as $tema): ?>
         <li>
             <?php echo $this->Html->link(
-                    $pergunta['titulo'],
-                    array('controller' => 'perguntas', 'action' => 'view', $pergunta['id'])
+                    $tema['nome'],
+                    array('controller' => 'temas', 'action' => 'view', $tema['id'])
             ) ?>
         </li>
         <?php endforeach; ?>
         <li>
             <span>
             <?php echo $this->Html->link(
-                    'Mais em ' . $topico['Topico']['nome'],
-                    array('controller' => 'topicos', 'action' => 'view', $topico['Topico']['id']),
+                    'Mais em ' . $grupo['Grupo']['nome'],
+                    array('controller' => 'grupos', 'action' => 'view', $grupo['Grupo']['id']),
                     array('class' => 'btn btn-mini')
             ); ?>
             </span>

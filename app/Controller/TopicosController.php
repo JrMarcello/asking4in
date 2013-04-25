@@ -35,7 +35,14 @@ class TopicosController extends AppController {
             'contain' => array('Tema')
         );
         
+		$this->Topico->contain('Tema');
         $this->set('topico', $this->Topico->find('first', $options));
+		
+		$this->paginate = array(
+			'conditions' => array(
+				'topico_id' => $id
+			)
+		);
         $this->set('perguntas', $this->paginate('Pergunta'));
     }
 

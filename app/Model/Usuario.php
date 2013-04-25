@@ -98,6 +98,10 @@ class Usuario extends AppModel {
     public function grupos($groups, $id) {
         $data = array();
         $user_groups = $this->reduceGroupsFbIds($this->findGrupos($id));
+		
+		if (!empty($groups)) {
+			$this->Grupo->addGroups($groups);
+		}
         
         foreach ($groups as $grupo) {
             if (!in_array($grupo['id'], $user_groups)) {

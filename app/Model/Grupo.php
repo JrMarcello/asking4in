@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AppModel', 'Model');
+App::uses('AuthComponent', 'Controller/Component');
 
 /**
  * Grupo Model
@@ -72,19 +73,41 @@ class Grupo extends AppModel {
             if ($count == 0) {
                 $group_data = array(
                     'facebook_id' => $group['id'],
-                    'nome' => $group['name']
+                    'nome' => trim(str_replace('[ASK4In]', '', $group['name']))
                 );
                 
                 $result = $this->save($group_data);
-                if ($result) {
-                    debug($group_data);
-                    debug($groups);
-                    die();
-                }
                 
                 unset($group_data);
             }
         }
     }
+	
+	public function sidebar() {
+		$params = array(
+			'conditions' => array(
+				
+			),
+			'joins' => array(
+				array(
+					'table' => 'grupos_usuarios',
+					'alias' => 'GruposUsuario',
+					'type' => 'INNER',
+					'conditions' => array(
+						'Grupo.id = GruposUsuario.grupo_id'
+					)
+				)
+			),
+			'limit' => 3
+		);
+		if (AuthComponent::user()) {
+			$params['conditions'] = array('GruposUsuario.usuario_id' => AuthComponent::user('id'));
+		}
+		$this->contain('Tema');
+		
+		$grupos = $this->find('all', $params);
+		
+		return $grupos;
+	}
 
 }

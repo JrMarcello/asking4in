@@ -1,12 +1,12 @@
-<div class="topicos form">
-	<?php echo $this->Form->create('Topico', array('inputDefaults' => Configure::read('Form.Defaults'))); ?>
+<div class="temas form">
+	<?php echo $this->Form->create('Tema', Configure::read('Form.Options')); ?>
 	<fieldset>
-		<legend><?php echo __('Edit Topico'); ?></legend>
+		<legend><?php echo __('Add Tema'); ?></legend>
 		<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('nome');
 		echo $this->Form->input('descricao', array('type' => 'textarea', 'label' => 'Descrição'));
-		echo $this->Form->input('tema_id');
+		echo $this->Form->input('grupo_id');
 		?>
 	</fieldset>
 	<?php echo $this->Form->end(array('label' => 'Enviar', 'class' => 'btn btn-primary')); ?>

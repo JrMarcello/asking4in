@@ -63,8 +63,9 @@ class AppController extends Controller {
     
     public function beforeRender() {
         parent::beforeRender();
-        $Topico = ClassRegistry::init('Topico');
-        $this->set('topicosSidebar', $Topico->sidebar());
+        $Grupo = ClassRegistry::init('Grupo');
+        $this->set('gruposSidebar', $Grupo->sidebar());
+		
         $this->set('isLogged', $this->Auth->loggedIn());
     }
     
