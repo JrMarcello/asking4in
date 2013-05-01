@@ -27,11 +27,12 @@ class UsuariosController extends AppController {
 
             $facebook_id = $this->request->data['response']['authResponse']['userID'];
             $facebook_id_check = $this->SignedRequest->decode(
-                            $this->request->data['response']['authResponse']['signedRequest']
-                    )['user_id'];
+                $this->request->data['response']['authResponse']['signedRequest']
+            )['user_id'];
 
             if ($facebook_id != $facebook_id_check) {
                 $this->Session->setFlash('Login Falhou', 'alerts/error');
+                $this->redirect('/');
             }
 
             $user = $this->Usuario->findByFacebookId($facebook_id);

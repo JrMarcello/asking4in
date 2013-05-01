@@ -37,8 +37,8 @@ class AppController extends Controller {
     public $components = array('Session', 'DebugKit.Toolbar',
         'Auth' => array(
             'loginAction' => array(
-                'controller' => 'usuarios',
-                'action' => 'login'
+                'controller' => 'pages',
+                'inicio'
             ),
             'authenticate' => array(
                 'Form' => array(
@@ -58,7 +58,12 @@ class AppController extends Controller {
     
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('index', 'view', 'login');
+		if ($this->Auth->loggedIn()
+				&& $this->request->params['controller'] == 'pages'
+				&& $this->request->params['pass'][0] == 'inicio') {
+			$this->redirect('/');
+		}
+        #$this->Auth->allow('index', 'view', 'login');
     }
     
     public function beforeRender() {
