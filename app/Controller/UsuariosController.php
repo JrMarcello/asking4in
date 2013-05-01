@@ -8,58 +8,77 @@ App::uses('AppController', 'Controller');
  * @property Usuario $Usuario
  */
 class UsuariosController extends AppController {
-    
+
     public $components = array('SignedRequest');
-    
+
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow('ajaxlogin');
     }
-    
+
     public function login() {
         $this->redirect('/');
     }
-    
-    public function ajaxlogin() {
+
+    public function ajaxlogin() {  
         if ($this->request->is('ajax')) {
             $this->layout = 'ajax';
             $this->autoRender = false;
-            
+
             $facebook_id = $this->request->data['response']['authResponse']['userID'];
             $facebook_id_check = $this->SignedRequest->decode(
-                $this->request->data['response']['authResponse']['signedRequest']
-            )['user_id'];
-            
+                            $this->request->data['response']['authResponse']['signedRequest']
+                    )['user_id'];
+
             if ($facebook_id != $facebook_id_check) {
                 $this->Session->setFlash('Login Falhou', 'alerts/error');
             }
-            
-            $user= $this->Usuario->findByFacebookId($facebook_id);
-            
+
+            $user = $this->Usuario->findByFacebookId($facebook_id);
+
+            if (!$user) {
+                $this->Usuario->create();
+                $this->Usuario->save(array(
+                    'Usuario' => array(
+                        'facebook_id' =>  $facebook_id,
+                        'nome' => $this->request->data['me']['name'],
+                        'email' => $this->request->data['me']['email']
+                    )
+                ));
+                $user = array(
+                    'Usuario' => array(
+                        'id' => $this->Usuario->id,
+                        'facebook_id' =>  $facebook_id,
+                        'nome' => $this->request->data['me']['name'],
+                        'email' => $this->request->data['me']['email']
+                    )
+                );
+            }
+
             $login = $this->Auth->login(array(
                 'id' => $user['Usuario']['id'],
                 'facebook_id' => $user['Usuario']['facebook_id'],
                 'nome' => $user['Usuario']['nome'],
                 'email' => $user['Usuario']['email']
             ));
-            
+
             exit($this->request->referer());
         }
     }
-    
+
     public function ajaxgroups() {
         if ($this->request->is('ajax')) {
             $this->layout = 'ajax';
             $this->autoRender = false;
-            
+
             if ($this->Auth->loggedIn()) {
                 $this->Usuario->grupos($this->request->data['groups'], $this->Auth->user('id'));
             }
-            
+
             exit;
         }
     }
-    
+
     public function logout() {
         $this->Auth->logout();
         $this->redirect('/');
