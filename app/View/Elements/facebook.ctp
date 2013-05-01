@@ -51,12 +51,13 @@ $app_id = Configure::read('Facebook.appId');
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    function ajaxLogin(response) {
+    function ajaxLogin(response, me) {
         $.ajax({
             type: 'post',
             url: '<?= $this->Html->url(array('controller' => 'usuarios', 'action' => 'ajaxlogin'), true); ?>',
             data: {
-                response: response
+                response: response,
+                me: me
             }
         }).success(function(redir) {
             window.location = redir;
@@ -67,11 +68,19 @@ $app_id = Configure::read('Facebook.appId');
         $('.facebook_login_link').click(function() {
             FB.getLoginStatus(function(response) {
                 if (response.status === 'connected') {
-                    ajaxLogin(response);
+                    FB.api('/me', function(me) {
+                        console.log(response);
+			console.log(me);
+                        ajaxLogin(response, me);
+                    });
                 } else {
-                    FB.login(function(resp) {
-                        if (resp.authResponse) {
-                            ajaxLogin(resp);
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            FB.api('/me', function(me) {
+                                console.log(response);
+                                console.log(me);
+                                ajaxLogin(response, me);
+                            });
                         }
                     }, {scope: 'email,user_groups'});
                 }
