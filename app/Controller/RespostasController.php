@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('HttpSocket', 'Network/Http');
 /**
  * Respostas Controller
  *
@@ -42,6 +43,25 @@ class RespostasController extends AppController {
 			$this->Resposta->create();
 			if ($this->Resposta->save($this->request->data)) {
 				$this->Session->setFlash(__('Sua resposta foi enviada.'), 'alerts/success');
+                
+                $sock = new HttpSocket();
+                
+                $topico = $this->Resposta->Pergunta->Topico->find('first', array(
+                    'conditions' => array(
+                        'Topico.id' => $this->request->data['Expertise']['topico_id']
+                    )
+                ))['Topico']['nome'];
+                
+                $grau = 0;
+                switch($this->request->data['Expertise']['nivel']) {
+                    case 'baixo': $grau = 10; break;
+                    case 'medio': $grau = 20; break;
+                    case 'alto': $grau = 30; break;
+                }
+                
+                $sock->post('http://localhost:8080/Plugin-CODI/rest/resources/expertise/create/degree',
+                        'userId=' . $this->Auth->user('facebook_id') . '&expertise=ask4in_' . $topico . '&score=' . $grau);
+                
 			} else {
 				$this->Session->setFlash(__('A resposta não pode ser enviada.'), 'alerts/error');
 			}

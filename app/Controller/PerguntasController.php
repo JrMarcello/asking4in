@@ -71,11 +71,21 @@ class PerguntasController extends AppController {
             'recursive' => 0
         );
         
+        $pergunta = $this->Pergunta->find('first', $options);
+        
         $this->paginate = array(
             'conditions' => array('Resposta.pergunta_id' => $id)
         );
         
-        $this->set('pergunta', $this->Pergunta->find('first', $options));
+        $expertise = $this->Pergunta->Usuario->Expertise->find('first', array(
+            'conditions' => array(
+                'usuario_id' => $this->Auth->user('id'),
+                'topico_id' => $pergunta['Topico']['id']
+            )
+        ));
+        
+        $this->set('pergunta', $pergunta);
+        $this->set('expertise', $expertise);
         $this->set('respostas', $this->paginate('Resposta'));
     }
 

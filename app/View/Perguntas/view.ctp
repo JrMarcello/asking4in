@@ -8,9 +8,36 @@
 <div class="respostas form">
     <?php
     echo $this->Form->create('Resposta', array_merge(array('action' => 'add'), Configure::read('Form.Options')));
-    echo $this->Form->input('conteudo', array('label' => 'Enviar Resposta', 'type' => 'textarea', 'class' => 'input-xxlarge'));
-    echo $this->Form->input('pergunta_id', array('type' => 'hidden', 'value' => $pergunta['Pergunta']['id']));
-
+    echo $this->Form->input('Resposta.conteudo', array(
+        'label' => 'Enviar Resposta',
+        'type' => 'textarea',
+        'class' => 'input-xxlarge'
+    ));
+    echo $this->Form->input('Resposta.pergunta_id', array(
+        'type' => 'hidden',
+        'value' => $pergunta['Pergunta']['id']
+    ));
+    
+    
+    if (!empty($expertise)) {
+        echo $this->Form->input('Expertise.id', array('type' => 'hidden'));
+        echo $this->Form->input('Expertise.nivel', array(
+            'label' => 'Expertise neste Tópico',
+            'options' => array('baixo', 'medio', 'alto'),
+            'value' => $expertise['Expertise']['nivel']
+        ));
+    }
+    else {
+        echo $this->Form->input('Expertise.nivel', array(
+            'label' => 'Expertise neste Tópico',
+            'options' => array('baixo' => 'baixo', 'medio' => 'medio', 'alto' => 'alto')
+        ));
+    }
+    
+    echo $this->Form->input('Expertise.usuario_id', array('type' => 'hidden', 'value' => AuthComponent::user('id')));
+    echo $this->Form->input('Expertise.topico_id', array('type' => 'hidden', 'value' => $pergunta['Topico']['id']));
+    
+    
     echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn'));
     ?>
 </div>
