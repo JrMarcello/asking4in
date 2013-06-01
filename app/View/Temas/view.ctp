@@ -1,5 +1,5 @@
 <div class="temas view">
-    <h2><?php echo $tema['Tema']['nome']; ?></h2>
+    <h3><?php echo $tema['Tema']['nome']; ?></h3>
     <dl>
         <dt><?php echo __('Descricao'); ?></dt>
         <dd>
@@ -14,7 +14,7 @@
     </dl>
 </div>
 <div class="related">
-	<h3>Tópicos:</h3>
+	<h4>Tópicos:</h4>
 	<?php if (!empty($topicos)): ?>
 		<table class="table table-striped table-hover">
 			<tr>

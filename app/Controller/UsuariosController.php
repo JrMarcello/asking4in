@@ -21,6 +21,17 @@ class UsuariosController extends AppController {
         $this->redirect('/');
     }
 
+    public function req() {
+        $HttpSocket = new HttpSocket();
+        //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/100000735141415');
+        //$results = $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/interest/create',
+        //'userId=100000735141415&name=Grupo24&score=1&typeValue=default');
+        //$results = $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/expertise/degree/create', 'userId=100000735141415&expertise=meuexpertise1&score=2');
+        //debug($this->Auth->user('facebook_id'));
+        //var_dump($results->isOk());
+        die();
+    }
+
     public function ajaxlogin() {
         if ($this->request->is('ajax')) {
             $this->layout = 'ajax';
@@ -35,12 +46,16 @@ class UsuariosController extends AppController {
                 $this->Session->setFlash('Login Falhou', 'alerts/error');
                 $this->redirect('/');
             }
-            
+
+            //Conexão com o CODI-Service (Verificando se Usuario existe e recuperando dados)
             $HttpSocket = new HttpSocket();
-            $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/rest/resources/user/' . $facebook_id);
-            if ($results['code'] == '200') {
-                //carregar as infods do usuarios
-                //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/rest/resources/user/infos');
+            $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . $facebook_id);
+
+            if ($results->isOk()) {
+                //carregar as infos do usuarios na codi aki
+            } else {
+                $HttpSocket = new HttpSocket();
+                $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/user/' . $facebook_id);
             }
 
             $user = $this->Usuario->findByFacebookId($facebook_id);
@@ -54,15 +69,6 @@ class UsuariosController extends AppController {
                         'email' => $this->request->data['me']['email']
                     )
                 ));
-
-                //criar a "estrutura" do usuario na codi
-                $HttpSocket = new HttpSocket();
-                //Instancia de User
-                $HttpSocket->post('http://localhost:8080/Plugin-CODI/rest/resources/user/' . $facebook_id);
-                //Instancia de Expertise com Grau
-                $HttpSocket->post('http://localhost:8080/Plugin-CODI/rest/resources/expertise/create/degree', 'userId=' . $facebook_id . '&expertise=Cake PHP_' . $facebook_id . '&score=12');
-                //Instancia de Role
-                $HttpSocket->post('http://localhost:8080/Plugin-CODI/rest/resources/role/create', 'userId=' . $facebook_id . '&name=Aluno_' . $facebook_id);
 
                 $user = array(
                     'Usuario' => array(
@@ -92,6 +98,21 @@ class UsuariosController extends AppController {
 
             if ($this->Auth->loggedIn()) {
                 $this->Usuario->grupos($this->request->data['groups'], $this->Auth->user('id'));
+
+                $HttpSocket = new HttpSocket();
+                $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . 
+                        $this->Auth->user('facebook_id'));
+
+                if ($results->isOk()) {
+                    //Conexão com CODI-Service (Criando Interesses)
+                    foreach ($this->request->data['groups'] as $grupo) {
+                        $HttpSocket = new HttpSocket();
+                        $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/interest/create', 
+                                'userId=' . $this->Auth->user('facebook_id') . 
+                                '&name=' . trim(str_replace('[ASK4In]', '', $grupo['name'])) . 
+                                '&score=1&typeValue=default');
+                    }
+                }
             }
 
             exit;

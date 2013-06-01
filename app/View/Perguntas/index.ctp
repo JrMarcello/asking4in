@@ -1,5 +1,5 @@
 <div class="perguntas index">
-    <h2><?php echo __('Perguntas'); ?></h2>
+    <h3><?php echo __('PERGUNTAS'); ?></h3>
     <table class="table table-striped table-hover table-bordered">
         <tr>
             <th><?php echo $this->Paginator->sort('titulo'); ?></th>

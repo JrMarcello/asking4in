@@ -60,10 +60,11 @@
 
             <p class="navbar-text pull-right">
                 <?php if (!$isLogged): ?>
-                    <a href="#" class="facebook_login_link">Login</a>
+                <a href="#" class="facebook_login_link"><img src="img/Login.png" style="height: 26px"/></a>
                 <?php else: ?>
-                    Logado como <?php echo AuthComponent::user('nome'); ?>
-                    <?php echo $this->Html->link('Logout', array('controller' => 'usuarios', 'action' => 'logout')) ?>
+                    <span style="margin-right: 25px">Logado como: <strong><?php echo AuthComponent::user('nome'); ?></strong></span>
+                    <a href="usuarios/logout"><img src="img/Logout.png" style="height: 26px" alt="Logout" /></a>
+                    <?php //echo $this->Html->link('Logout', array('controller' => 'usuarios', 'action' => 'logout')) ?>
                     <?php // echo $this->Facebook->logout(array('redirect' => Router::url(array('controller' => 'usuarios', 'action' => 'logout'), true), 'label' => 'Logout')); ?>
                 <?php endif; ?>
             </p>

@@ -20,9 +20,10 @@ $app_id = Configure::read('Facebook.appId');
                     for (var i = 0; i < data.data.length; i++) {
                         if (data.data[i].name.match(/^\[ASK4In\]/) != null) {
                             groups.push(data.data[i]);
+                            //console.log(data.data[i]);
                         }
                     }
-
+                    //console.log(groups);
                     $.ajax({
                         type: 'post',
                         url: '<?= $this->Html->url(array('controller' => 'usuarios', 'action' => 'ajaxgroups'), true); ?>',
@@ -69,16 +70,16 @@ $app_id = Configure::read('Facebook.appId');
             FB.getLoginStatus(function(response) {
                 if (response.status === 'connected') {
                     FB.api('/me', function(me) {
-                        console.log(response);
-			console.log(me);
+                        //console.log(response);
+			//console.log(me);
                         ajaxLogin(response, me);
                     });
                 } else {
                     FB.login(function(response) {
                         if (response.authResponse) {
                             FB.api('/me', function(me) {
-                                console.log(response);
-                                console.log(me);
+                                //console.log(response);
+                                //console.log(me);
                                 ajaxLogin(response, me);
                             });
                         }

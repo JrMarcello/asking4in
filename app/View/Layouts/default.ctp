@@ -29,10 +29,10 @@
         <div id="wrap">
             <div id="container" class="container-fluid">
                 <div id="content" class="row-fluid">
-                    <div id="lateral" class="span3">
+                    <div id="lateral" class="span2">
                         <?php echo $this->element('sidebar'); ?>
                     </div>
-                    <div id="principal" class="span9">
+                    <div id="principal" class="span6">
                         <?php echo $this->Session->flash(); ?>
                         &nbsp;
                         <?php echo $this->fetch('content'); ?>
@@ -41,9 +41,9 @@
             </div>
             <div id="push"></div>
         </div>
-        <div id="footer">
-            <div class="container">
-                &nbsp;
+        <div class="modal-footer">
+            <div>
+                <center>SIDE Group - CODI</center>
             </div>
         </div>
     </body>

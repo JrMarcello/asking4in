@@ -1,5 +1,5 @@
 <div class="topicos view">
-    <h2><?php echo $topico['Topico']['nome']; ?></h2>
+    <h3><?php echo $topico['Topico']['nome']; ?></h3>
     <dl>
         <dt><?php echo __('Descricao'); ?></dt>
         <dd>
@@ -14,7 +14,7 @@
     </dl>
 </div>
 <div class="related">
-    <h3>Perguntas neste tópico:</h3>
+    <h4>Perguntas neste tópico:</h4>
 	<?php if (!empty($perguntas)): ?>
 	    <div class="span6">
 	        <table class="table table-striped table-hover">

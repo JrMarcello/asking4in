@@ -38,7 +38,8 @@
 
                 <div class="nav-collapse collapse">
                     <p class="navbar-text pull-right">
-                            <a href="#" class="facebook_login_link">Login</a>
+                            <!--<a href="#" class="facebook_login_link">Login</a>-->
+                            <a href="#" class="facebook_login_link"><img src="img/Login.png" style="height: 26px" alt="Login"/></a>
                     </p>
                 </div>
             </div>
@@ -46,18 +47,20 @@
         <div id="wrap">
             <div id="container" class="container-fluid">
                 <div id="content" class="row-fluid">
-                    <div id="principal" class="span9">
-                        <?php echo $this->Session->flash(); ?>
-                        &nbsp;
-                        <?php echo $this->fetch('content'); ?>
+                    <div id="banner"><center>BANNER</center>
                     </div>
+                    <!--<div id="principal" class="span9">
+                        <?php //echo $this->Session->flash(); ?>
+                        &nbsp;
+                        <?php //echo $this->fetch('content'); ?>
+                    </div>-->
                 </div>
             </div>
-            <div id="push"></div>
+            <!--<div id="push"></div>-->
         </div>
-        <div id="footer">
-            <div class="container">
-                &nbsp;
+        <div class="modal-footer">
+            <div >
+                <center>SIDE Group - CODI</center>
             </div>
         </div>
     </body>

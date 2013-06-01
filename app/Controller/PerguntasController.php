@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AppController', 'Controller');
+App::uses('HttpSocket', 'Network/Http');
 
 /**
  * Perguntas Controller
@@ -8,8 +9,9 @@ App::uses('AppController', 'Controller');
  * @property Pergunta $Pergunta
  */
 class PerguntasController extends AppController {
+
     public $components = array('RequestHandler');
-    
+
     public function beforeFilter() {
         parent::beforeFilter();
     }
@@ -35,20 +37,20 @@ class PerguntasController extends AppController {
         $this->Pergunta->recursive = 0;
         $this->set('perguntas', $this->paginate());
     }
-    
+
     public function typeahead() {
         if (!$this->request->is('ajax')) {
             $this->redirect(array('action' => 'index'));
         }
         $this->autoRender = false;
         $this->RequestHandler->respondAs('json');
-        
+
         $query = $this->request->query['query'];
-        
+
         $results = $this->Pergunta->find('list', array(
-                'conditions' => array(
-                    'Pergunta.titulo LIKE' => "%$query%",
-                )
+            'conditions' => array(
+                'Pergunta.titulo LIKE' => "%$query%",
+            )
         ));
         return json_encode(array_values($results));
     }
@@ -64,17 +66,17 @@ class PerguntasController extends AppController {
         if (!$this->Pergunta->exists($id)) {
             throw new NotFoundException(__('Invalid pergunta'));
         }
-        
+
         $options = array(
             'conditions' => array('Pergunta.' . $this->Pergunta->primaryKey => $id),
             'contains' => false,
             'recursive' => 0
         );
-        
+
         $this->paginate = array(
             'conditions' => array('Resposta.pergunta_id' => $id)
         );
-        
+
         $this->set('pergunta', $this->Pergunta->find('first', $options));
         $this->set('respostas', $this->paginate('Resposta'));
     }
@@ -88,6 +90,20 @@ class PerguntasController extends AppController {
         if ($this->request->is('post')) {
             $this->Pergunta->create();
             if ($this->Pergunta->save($this->request->data)) {
+                $grupoId = $this->Pergunta->Topico->find('first', array('conditions' =>
+                            array('Topico.id' => $this->request->data['Pergunta']['topico_id'])))['Tema']['grupo_id'];
+                
+                //Conexão com CODI-Service (Criando Preferencias)
+                $HttpSocket = new HttpSocket();
+                $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/preference/create', 
+                        'userId=' . $this->Auth->user('facebook_id') .
+                        '&interestName=' . trim(str_replace(' ', '-',$this->Pergunta->Topico->Tema->Grupo->find('first', 
+                                array('conditions' => array('Grupo.id' => $grupoId)))['Grupo']['nome'])) .
+                        '&preferenceName=' . trim(str_replace(' ', '-', $this->Pergunta->Topico->find('first', 
+                                array('conditions' => array('Topico.id' => 
+                                    $this->request->data['Pergunta']['topico_id'])))['Tema']['nome'])) .
+                        '&score=0');
+
                 $this->Session->setFlash(__('The pergunta has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
