@@ -2,6 +2,7 @@
 
 App::uses('AppController', 'Controller');
 App::uses('HttpSocket', 'Network/Http');
+//App::uses('Sanitize', 'Utility');
 
 /**
  * Perguntas Controller
@@ -9,7 +10,7 @@ App::uses('HttpSocket', 'Network/Http');
  * @property Pergunta $Pergunta
  */
 class PerguntasController extends AppController {
-
+    public $paginate = array('limit' => 10);
     public $components = array('RequestHandler');
 
     public function beforeFilter() {
@@ -35,6 +36,11 @@ class PerguntasController extends AppController {
             $this->set('search', $search);
         }
         $this->Pergunta->recursive = 0;
+        /* $perguntas = array();
+          foreach ($this->paginate() as $pergunta){
+          $perguntas[] = Sanitize::clean($pergunta, array('escape' => false));
+          }
+          $this->set('perguntas', $perguntas); */
         $this->set('perguntas', $this->paginate());
     }
 
@@ -78,7 +84,33 @@ class PerguntasController extends AppController {
         );
 
         $this->set('pergunta', $this->Pergunta->find('first', $options));
-        $this->set('respostas', $this->paginate('Resposta'));
+        
+        //Rank das respostas deve ser feito aki!
+        $respostas = array();
+        foreach ($this->paginate('Resposta') as $resposta) {
+            $expertise = trim(str_replace(' ', '-', $this->Pergunta->Topico->find('first', array('conditions' =>
+                                array('Topico.id' => $resposta['Pergunta']['topico_id'])))['Tema']['nome']));
+           
+            $HttpSocket = new HttpSocket();
+            $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree', 'userId=' . $resposta['Usuario']['facebook_id'] .
+                    '&expertise=' . $expertise);
+
+            if ($results->isOK()) {
+                $resposta['Resposta']['score'] = $results->body;
+                $respostas[] = $resposta;
+            } else {
+                $resposta['Resposta']['score'] = '0';
+                $respostas[] = $resposta;
+            }
+        }
+        
+        foreach ($respostas as $temp)
+            $temps[] = $temp['Resposta']['score'];
+        
+        if (!empty($respostas))
+            array_multisort($temps, SORT_DESC, $respostas);
+
+        $this->set('respostas', $respostas);
     }
 
     /**
@@ -92,17 +124,29 @@ class PerguntasController extends AppController {
             if ($this->Pergunta->save($this->request->data)) {
                 $grupoId = $this->Pergunta->Topico->find('first', array('conditions' =>
                             array('Topico.id' => $this->request->data['Pergunta']['topico_id'])))['Tema']['grupo_id'];
-                
+
                 //Conexão com CODI-Service (Criando Preferencias)
                 $HttpSocket = new HttpSocket();
                 $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/preference/create', 
                         'userId=' . $this->Auth->user('facebook_id') .
-                        '&interestName=' . trim(str_replace(' ', '-',$this->Pergunta->Topico->Tema->Grupo->find('first', 
-                                array('conditions' => array('Grupo.id' => $grupoId)))['Grupo']['nome'])) .
-                        '&preferenceName=' . trim(str_replace(' ', '-', $this->Pergunta->Topico->find('first', 
-                                array('conditions' => array('Topico.id' => 
-                                    $this->request->data['Pergunta']['topico_id'])))['Tema']['nome'])) .
+                        '&interestName=' . trim(str_replace(' ', '-', 
+                                $this->Pergunta->Topico->Tema->Grupo->find('first', array('conditions' =>
+                                            array('Grupo.id' => $grupoId)))['Grupo']['nome'])) .
+                        '&preferenceName=' . trim(str_replace(' ', '-', 
+                                $this->Pergunta->Topico->find('first', 
+                                        array('conditions' => array('Topico.id' => 
+                                            $this->request->data['Pergunta']['topico_id'])))['Tema']['nome'])) .
                         '&score=0');
+
+                //Conexão com CODI-Service (Adicinando o Usuario a um Grupo logico baseado em Preferencia)
+                //$HttpSocket = new HttpSocket();
+                $HttpSocket->put('http://localhost:8080/Plugin-CODI/resources/group/user/add', 
+                        'userId=' . $this->Auth->user('facebook_id') .
+                        '&groupName=' . trim(str_replace(' ', '-', 
+                                $this->Pergunta->Topico->find('first', 
+                                        array('conditions' => array('Topico.id' => 
+                                            $this->request->data['Pergunta']['topico_id'])))['Tema']['nome'])));
+
 
                 $this->Session->setFlash(__('The pergunta has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
@@ -110,8 +154,36 @@ class PerguntasController extends AppController {
                 $this->Session->setFlash(__('The pergunta could not be saved. Please, try again.'), 'alerts/error');
             }
         }
+
         $usuarios = $this->Pergunta->Usuario->find('list');
-        $topicos = $this->Pergunta->Topico->find('list');
+        $topicos = $this->Pergunta->Topico->find('list', array(
+            'conditions' => array(
+                'Usuario.id' => $this->Auth->user('id')
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'temas',
+                    'alias' => 'Tema',
+                    'conditions' => array('Tema.id = Topico.tema_id')
+                ),
+                array(
+                    'table' => 'grupos',
+                    'alias' => 'Grupo',
+                    'conditions' => array('Grupo.id = Tema.grupo_id')
+                ),
+                array(
+                    'table' => 'grupos_usuarios',
+                    'alias' => 'GrupoUsuario',
+                    'conditions' => array('GrupoUsuario.grupo_id = Grupo.id')
+                ),
+                array(
+                    'table' => 'usuarios',
+                    'alias' => 'Usuario',
+                    'conditions' => array('GrupoUsuario.usuario_id = Usuario.id')
+                )
+            )
+        ));
+
         $this->set(compact('usuarios', 'topicos'));
     }
 

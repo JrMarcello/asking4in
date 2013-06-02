@@ -52,11 +52,6 @@ class Usuario extends AppModel {
             'exclusive' => '',
             'finderQuery' => '',
             'counterQuery' => ''
-        ),
-        'Expertise' => array(
-            'className' => 'Expertise',
-            'foreignKey' => 'usuario_id',
-            'dependent' => true
         )
     );
 

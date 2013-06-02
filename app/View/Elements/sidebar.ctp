@@ -11,9 +11,10 @@
         </li>
         <?php endforeach; ?>
         <li>
-            <span>
+            <span style="margin-left: 0px">
             <?php echo $this->Html->link(
                     'Mais em ' . $grupo['Grupo']['nome'],
+                    //'+',
                     array('controller' => 'grupos', 'action' => 'view', $grupo['Grupo']['id']),
                     array('class' => 'btn btn-mini')
             ); ?>

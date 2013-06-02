@@ -62,8 +62,14 @@
                 <?php if (!$isLogged): ?>
                 <a href="#" class="facebook_login_link"><img src="img/Login.png" style="height: 26px"/></a>
                 <?php else: ?>
-                    <span style="margin-right: 25px">Logado como: <strong><?php echo AuthComponent::user('nome'); ?></strong></span>
-                    <a href="usuarios/logout"><img src="img/Logout.png" style="height: 26px" alt="Logout" /></a>
+                    <span style="margin-right: 25px">Logado como: 
+                        <strong><?php echo AuthComponent::user('nome'); ?></strong></span>
+                   
+                        <?= $this->Html->link($this->Html->image('Logout.png',
+                           array('style' => 'height: 26px', 'alt' => 'logout')), 
+                           array('controller' => 'usuarios', 'action' => 'logout'),
+                           array('escape' => false)); ?>
+                    
                     <?php //echo $this->Html->link('Logout', array('controller' => 'usuarios', 'action' => 'logout')) ?>
                     <?php // echo $this->Facebook->logout(array('redirect' => Router::url(array('controller' => 'usuarios', 'action' => 'logout'), true), 'label' => 'Logout')); ?>
                 <?php endif; ?>

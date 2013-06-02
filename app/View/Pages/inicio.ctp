@@ -39,7 +39,9 @@
                 <div class="nav-collapse collapse">
                     <p class="navbar-text pull-right">
                             <!--<a href="#" class="facebook_login_link">Login</a>-->
-                            <a href="#" class="facebook_login_link"><img src="img/Login.png" style="height: 26px" alt="Login"/></a>
+                            <a href="#" class="facebook_login_link"><?= $this->Html->image('Login.png', 
+                                    array('style' => 'height: 26px', 'alt' => 'login')); ?></a>
+                            
                     </p>
                 </div>
             </div>
@@ -59,8 +61,16 @@
             <!--<div id="push"></div>-->
         </div>
         <div class="modal-footer">
-            <div >
-                <center>SIDE Group - CODI</center>
+            <div>
+                <br/>
+                <br/>
+                <center>
+                    <span class="muted">
+                        © Copyright 2013 - <strong>SIDE Search Group</strong> - Criado usando 
+                        <?php echo $this->Html->link('CakePHP ', 'http://cakephp.org', 
+                                array('target' => '_blank'))?> 2.3.0
+                    </span>
+                </center>
             </div>
         </div>
     </body>

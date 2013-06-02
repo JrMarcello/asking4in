@@ -15,6 +15,8 @@ class UsuariosController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow('ajaxlogin');
+        
+       
     }
 
     public function login() {
@@ -22,14 +24,40 @@ class UsuariosController extends AppController {
     }
 
     public function req() {
-        $HttpSocket = new HttpSocket();
-        //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/100000735141415');
-        //$results = $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/interest/create',
-        //'userId=100000735141415&name=Grupo24&score=1&typeValue=default');
-        //$results = $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/expertise/degree/create', 'userId=100000735141415&expertise=meuexpertise1&score=2');
-        //debug($this->Auth->user('facebook_id'));
-        //var_dump($results->isOk());
-        die();
+        
+        
+        //gets
+        //$HttpSocket = new HttpSocket();
+        //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . $this->Auth->user('facebook_id'));
+        //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/expertises/' . $this->Auth->user('facebook_id'));
+        /*$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree',
+                'userId=' . $this->Auth->user('facebook_id') .
+                '&expertise=rmi');*/
+        //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/interests/' . $this->Auth->user('facebook_id'));
+        /*$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/preferences', 
+                'userId=' . $this->Auth->user('facebook_id') .
+                '&interestName=pod');*/
+        /*$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/group', 
+                'userId=' . $this->Auth->user('facebook_id') .
+                '&group=rmi');*/
+        //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/groups/' . $this->Auth->user('facebook_id'));
+        
+        debug(json_decode($results->body));die(); 
+        //debug($results->body);die();
+    }
+    
+    public function view($id = null){
+        if (!$this->Usuario->exists($id)) {
+            throw new NotFoundException(__('Usuario invalido'));
+        }
+        
+        $options = array(
+            'conditions' => array('Usuario.' . $this->Usuario->primaryKey => $id),
+            'contains' => false,
+            'recursive' => 0
+        );
+        
+        $this->set('usuario', $this->Usuario->find('first', $options));
     }
 
     public function ajaxlogin() {
@@ -92,6 +120,12 @@ class UsuariosController extends AppController {
     }
 
     public function ajaxgroups() {
+        foreach ($this->Usuario->Pergunta->Topico->Tema->find('list') as $grupo){
+            $HttpSocket = new HttpSocket();
+            $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/group/create',
+                    'name=' . trim(str_replace(' ', '-',$grupo)));
+        }
+        
         if ($this->request->is('ajax')) {
             $this->layout = 'ajax';
             $this->autoRender = false;

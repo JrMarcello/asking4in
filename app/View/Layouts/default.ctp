@@ -41,9 +41,17 @@
             </div>
             <div id="push"></div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="height: 30px">
             <div>
-                <center>SIDE Group - CODI</center>
+                <br/>
+                <br/>
+                <center>
+                    <span class="muted">
+                        © Copyright 2013 - <strong>SIDE Search Group</strong> - Criado usando 
+                        <?php echo $this->Html->link('CakePHP ', 'http://cakephp.org', 
+                                array('target' => '_blank'))?> 2.3.0
+                    </span>
+                </center>
             </div>
         </div>
     </body>

@@ -27,10 +27,7 @@
     <h5><?php echo __('Respostas'); ?></h5>
     <?php if (!empty($respostas)): ?>
         <?php
-        //Rank das resposta deve ser feito aki!
-        $respostasSorted = $respostas;
-        
-        foreach ($respostasSorted as $resposta):
+        foreach ($respostas as $resposta):
             //debug($resposta);
             ?>
             <div class="span8">
