@@ -42,18 +42,17 @@ class RespostasController extends AppController {
      */
     public function add() {
         if ($this->request->is('post')) {
-            //debug($this->request->data);die();
             $this->Resposta->create();
             if ($this->Resposta->save($this->request->data)) {
-                $temaId = $this->Resposta->Pergunta->find('first', array('conditions' =>
+                /*$temaId = $this->Resposta->Pergunta->find('first', array('conditions' =>
                             array('Pergunta.id' => $this->request->data['Resposta']['pergunta_id'])))['Topico']['tema_id'];
-                
+                */
                 //Conexão com o CODI-Service (Criando Expertise)
                 $HttpSocket = new HttpSocket();
                 $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/expertise/degree/create', 
                         'userId=' . $this->Auth->user('facebook_id') .
-                        '&expertise=' . trim(str_replace(' ', '-', $this->Resposta->Pergunta->Topico->Tema->find('first', 
-                                array('conditions' => array('Tema.id' => $temaId)))['Tema']['nome'])) .
+                        '&expertise=' . trim(str_replace(' ', '-', $this->Resposta->Pergunta->find('first', array('conditions' =>
+                            array('Pergunta.id' => $this->request->data['Resposta']['pergunta_id'])))['Topico']['nome'])) .
                         '&score=' . $this->request->data['Resposta']['expertiseLevel']);
 
                 $this->Session->setFlash(__('Sua resposta foi enviada.'), 'alerts/success');

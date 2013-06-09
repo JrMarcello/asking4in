@@ -23,12 +23,10 @@ class UsuariosController extends AppController {
         $this->redirect('/');
     }
 
-    public function req() {
-        
-        
+    public function req() { 
         //gets
-        //$HttpSocket = new HttpSocket();
-        //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . $this->Auth->user('facebook_id'));
+        $HttpSocket = new HttpSocket();
+        $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . $this->Auth->user('facebook_id'));
         //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/expertises/' . $this->Auth->user('facebook_id'));
         /*$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree',
                 'userId=' . $this->Auth->user('facebook_id') .
@@ -42,7 +40,9 @@ class UsuariosController extends AppController {
                 '&group=rmi');*/
         //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/groups/' . $this->Auth->user('facebook_id'));
         
-        debug(json_decode($results->body));die(); 
+        debug($results->isOk());
+        die();
+        //debug(json_decode($results->body));die(); 
         //debug($results->body);die();
     }
     
@@ -120,12 +120,6 @@ class UsuariosController extends AppController {
     }
 
     public function ajaxgroups() {
-        foreach ($this->Usuario->Pergunta->Topico->Tema->find('list') as $grupo){
-            $HttpSocket = new HttpSocket();
-            $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/group/create',
-                    'name=' . trim(str_replace(' ', '-',$grupo)));
-        }
-        
         if ($this->request->is('ajax')) {
             $this->layout = 'ajax';
             $this->autoRender = false;
@@ -134,17 +128,35 @@ class UsuariosController extends AppController {
                 $this->Usuario->grupos($this->request->data['groups'], $this->Auth->user('id'));
 
                 $HttpSocket = new HttpSocket();
-                $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . 
+                $result = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . 
                         $this->Auth->user('facebook_id'));
 
-                if ($results->isOk()) {
-                    //Conexão com CODI-Service (Criando Interesses)
+                if ($result->isOk()) {
                     foreach ($this->request->data['groups'] as $grupo) {
-                        $HttpSocket = new HttpSocket();
-                        $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/interest/create', 
-                                'userId=' . $this->Auth->user('facebook_id') . 
-                                '&name=' . trim(str_replace('[ASK4In]', '', $grupo['name'])) . 
+                        //Conexão com CODI-Service (Criando/Atualizando Grupos)
+                        $group = $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/group/create',
+                                'name=' . trim(str_replace('[ASK4In]', '', $grupo['name'])));
+                        
+                        if($group->isOK()){
+                        //Conexão com CODI-Service (Criando/Atualizando Interesses)
+                        $interesse = $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/interest/create', 
+                                'groupName=' . trim(str_replace('[ASK4In]', '', $grupo['name'])) . 
+                                '&interestName=' . trim(str_replace('[ASK4In]', '', $grupo['name'])) . 
                                 '&score=1&typeValue=default');
+                        }
+                        
+                        if($interesse->isOk()){
+                            $HttpSocket->put('http://localhost:8080/Plugin-CODI/resources/group/user/add',
+                                    'userId=' . $this->Auth->user('facebook_id') .
+                                    '&groupName=' . trim(str_replace('[ASK4In]', '', $grupo['name'])));
+                        }
+                    }
+                    
+                    //Conexão com CODI-Service (Criando/Atualizando Subgrupos)
+                    foreach ($this->Usuario->Pergunta->Topico->find('all') as $topico){
+                        $HttpSocket = new HttpSocket();
+                        $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/subgroup/create',
+                                    'name=' . trim(str_replace(' ', '-',$topico['Topico']['nome'])));
                     }
                 }
             }
