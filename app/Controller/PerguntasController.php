@@ -85,12 +85,12 @@ class PerguntasController extends AppController {
 
         $this->set('pergunta', $this->Pergunta->find('first', $options));
         
-        //Rank das respostas deve ser feito aki!
         $respostas = array();
         foreach ($this->paginate('Resposta') as $resposta) {
             $expertise = trim(str_replace(' ', '-', $this->Pergunta->Topico->find('first', array('conditions' =>
                                 array('Topico.id' => $resposta['Pergunta']['topico_id'])))['Tema']['nome']));
            
+            ////Conexão com CODI-Service (Criando Degree)
             $HttpSocket = new HttpSocket();
             $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree', 'userId=' . $resposta['Usuario']['facebook_id'] .
                     '&expertise=' . $expertise);
@@ -135,18 +135,16 @@ class PerguntasController extends AppController {
                         '&preferenceName=' . trim(str_replace(' ', '-', 
                                 $this->Pergunta->Topico->find('first', 
                                         array('conditions' => array('Topico.id' => 
-                                            $this->request->data['Pergunta']['topico_id'])))['Tema']['nome'])) .
+                                            $this->request->data['Pergunta']['topico_id'])))['Topico']['nome'])) .//corrigir
                         '&score=0');
 
-                //Conexão com CODI-Service (Adicinando o Usuario a um Grupo logico baseado em Preferencia)
-                //$HttpSocket = new HttpSocket();
-                $HttpSocket->put('http://localhost:8080/Plugin-CODI/resources/group/user/add', 
+                //Conexão com CODI-Service (Adicinando o Usuario a um SubGrupo logico baseado em Preferencia)
+                $HttpSocket->put('http://localhost:8080/Plugin-CODI/resources/subgroup/user/add', //criar
                         'userId=' . $this->Auth->user('facebook_id') .
-                        '&groupName=' . trim(str_replace(' ', '-', 
+                        '&subGroupName=' . trim(str_replace(' ', '-', 
                                 $this->Pergunta->Topico->find('first', 
                                         array('conditions' => array('Topico.id' => 
-                                            $this->request->data['Pergunta']['topico_id'])))['Tema']['nome'])));
-
+                                            $this->request->data['Pergunta']['topico_id'])))['Topico']['nome'])));
 
                 $this->Session->setFlash(__('The pergunta has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
