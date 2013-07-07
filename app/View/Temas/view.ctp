@@ -1,25 +1,25 @@
 <div class="temas view">
     <h3><?php echo $tema['Tema']['nome']; ?></h3>
-    <dl>
-        <dt><?php echo __('Descricao'); ?></dt>
+    <dl style="margin-left: 25px">
+        <dt><?php echo __('Description'); ?></dt>
         <dd>
 			<?php echo h($tema['Tema']['descricao']); ?>
             &nbsp;
         </dd>
-        <dt>Grupo</dt>
+        <dt>Group</dt>
         <dd>
 			<?php echo $this->Html->link($tema['Grupo']['nome'], array('controller' => 'grupos', 'action' => 'view', $tema['Grupo']['id'])); ?>
             &nbsp;
         </dd>
     </dl>
 </div>
-<div class="related">
-	<h4>Tópicos:</h4>
+<div class="related" style="margin-left: 25px">
+	<h4>Topics:</h4>
 	<?php if (!empty($topicos)): ?>
 		<table class="table table-striped table-hover">
 			<tr>
-				<th><?php echo __('Nome'); ?></th>
-				<th><?php echo __('Descricao'); ?></th>
+				<th><?php echo __('Name'); ?></th>
+				<th><?php echo __('Description'); ?></th>
 			</tr>
 			<?php foreach ($topicos as $topico): ?>
 				<tr>

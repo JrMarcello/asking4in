@@ -1,7 +1,7 @@
 
 <?php if ($isLogged): ?>
     <div>
-        Olá <?php echo $usuario['Usuario']['nome'];//debug($usuario);?>
+        Hi, <?php echo $usuario['Usuario']['nome'];//debug($usuario);?>
     </div>
 <?php else: ?>
     <div class="clearfix">&nbsp;</div>

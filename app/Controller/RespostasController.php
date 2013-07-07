@@ -44,9 +44,6 @@ class RespostasController extends AppController {
         if ($this->request->is('post')) {
             $this->Resposta->create();
             if ($this->Resposta->save($this->request->data)) {
-                /*$temaId = $this->Resposta->Pergunta->find('first', array('conditions' =>
-                            array('Pergunta.id' => $this->request->data['Resposta']['pergunta_id'])))['Topico']['tema_id'];
-                */
                 //Conexão com o CODI-Service (Criando Expertise)
                 $HttpSocket = new HttpSocket();
                 $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/expertise/degree/create', 

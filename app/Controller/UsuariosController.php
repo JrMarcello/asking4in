@@ -9,14 +9,11 @@ App::uses('HttpSocket', 'Network/Http');
  * @property Usuario $Usuario
  */
 class UsuariosController extends AppController {
-
     public $components = array('SignedRequest');
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('ajaxlogin');
-        
-       
+        $this->Auth->allow('ajaxlogin'); 
     }
 
     public function login() {
@@ -25,8 +22,8 @@ class UsuariosController extends AppController {
 
     public function req() { 
         //gets
-        $HttpSocket = new HttpSocket();
-        $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . $this->Auth->user('facebook_id'));
+        //$HttpSocket = new HttpSocket();
+        //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/user/' . $this->Auth->user('facebook_id'));
         //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/expertises/' . $this->Auth->user('facebook_id'));
         /*$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree',
                 'userId=' . $this->Auth->user('facebook_id') .
@@ -40,15 +37,14 @@ class UsuariosController extends AppController {
                 '&group=rmi');*/
         //$results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/groups/' . $this->Auth->user('facebook_id'));
         
-        debug($results->isOk());
-        die();
+        //debug($results->isOk());die();
         //debug(json_decode($results->body));die(); 
         //debug($results->body);die();
     }
     
     public function view($id = null){
         if (!$this->Usuario->exists($id)) {
-            throw new NotFoundException(__('Usuario invalido'));
+            throw new NotFoundException(__('Invalid User'));
         }
         
         $options = array(
@@ -71,7 +67,7 @@ class UsuariosController extends AppController {
                     )['user_id'];
 
             if ($facebook_id != $facebook_id_check) {
-                $this->Session->setFlash('Login Falhou', 'alerts/error');
+                $this->Session->setFlash('Login Fail', 'alerts/error');
                 $this->redirect('/');
             }
 
@@ -135,20 +131,20 @@ class UsuariosController extends AppController {
                     foreach ($this->request->data['groups'] as $grupo) {
                         //Conexão com CODI-Service (Criando/Atualizando Grupos)
                         $group = $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/group/create',
-                                'name=' . trim(str_replace('[ASK4In]', '', $grupo['name'])));
+                                'name=' . str_replace(' ','-',trim(str_replace('[ASK4In]', '', $grupo['name']))));
                         
                         if($group->isOK()){
                         //Conexão com CODI-Service (Criando/Atualizando Interesses)
                         $interesse = $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/interest/create', 
-                                'groupName=' . trim(str_replace('[ASK4In]', '', $grupo['name'])) . 
-                                '&interestName=' . trim(str_replace('[ASK4In]', '', $grupo['name'])) . 
+                                'groupName=' . str_replace(' ','-',trim(str_replace('[ASK4In]', '', $grupo['name']))) . 
+                                '&interestName=' . str_replace(' ','-',trim(str_replace('[ASK4In]', '', $grupo['name']))) . 
                                 '&score=1&typeValue=default');
                         }
                         
                         if($interesse->isOk()){
                             $HttpSocket->put('http://localhost:8080/Plugin-CODI/resources/group/user/add',
                                     'userId=' . $this->Auth->user('facebook_id') .
-                                    '&groupName=' . trim(str_replace('[ASK4In]', '', $grupo['name'])));
+                                    '&groupName=' . str_replace(' ','-',trim(str_replace('[ASK4In]', '', $grupo['name']))));
                         }
                     }
                     

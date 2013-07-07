@@ -80,7 +80,20 @@ class Topico extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		)
+		),
+                'Notificacao' => array(
+                            'className' => 'Notificacao',
+                            'foreignKey' => 'topico_id',
+                            'dependent' => false,
+                            'conditions' => '',
+                            'fields' => '',
+                            'order' => '',
+                            'limit' => '',
+                            'offset' => '',
+                            'exclusive' => '',
+                            'finderQuery' => '',
+                            'counterQuery' => ''
+                    )
 	);
     
     public function sidebar() {

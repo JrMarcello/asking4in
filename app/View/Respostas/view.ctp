@@ -1,5 +1,5 @@
 <div class="respostas view">
-<h2><?php  echo __('Resposta'); ?></h2>
+<h2><?php  echo __('Answers'); ?></h2>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>

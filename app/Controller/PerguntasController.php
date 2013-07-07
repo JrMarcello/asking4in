@@ -10,11 +10,52 @@ App::uses('HttpSocket', 'Network/Http');
  * @property Pergunta $Pergunta
  */
 class PerguntasController extends AppController {
+    public $notifications = null;
     public $paginate = array('limit' => 10);
     public $components = array('RequestHandler');
 
     public function beforeFilter() {
         parent::beforeFilter();
+    }
+    
+    public function beforeRender() {
+        parent::beforeRender();
+        
+        $this->loadModel('Notificacao');
+        $notifications = $this->Notificacao->find('all', array(
+            'conditions' => array('Notificacao.usuario_id' => $this->Auth->user('id'))));
+        //var_dump($notifications);die();
+        $topicos = '';
+        $cont = 1;
+        $notificationsSize = sizeof($notifications);
+        if ($notifications != null & !empty($notifications)){
+            foreach ($notifications as $notification){
+                if ($cont != ($notificationsSize) && $cont == ($notificationsSize - 1)){
+                    $topicos .= $notification['Topico']['nome'] . ' ';
+                    $cont++;
+                } elseif ($cont != ($notificationsSize)) {
+                    $topicos .= $notification['Topico']['nome'] . ', ';
+                    $cont++;
+                } elseif ($cont == $notificationsSize && $notificationsSize != 1){
+                    $topicos .= __('e ') . $notification['Topico']['nome'];
+                } elseif($notificationsSize == 1){
+                    $topicos .= $notification['Topico']['nome'];
+                }
+            }
+            
+            if($notificationsSize == 1){
+                $this->Session->setFlash(__('Olá, <strong>'. $this->Auth->user('nome') 
+                    .'</strong>... Você tem novidades em 1 topico: <strong>' 
+                    . $topicos . '</strong>'), 'alerts/success');
+            }
+            else{
+                $this->Session->setFlash(__('Olá, <strong>'. $this->Auth->user('nome') 
+                    .'</strong>... Você tem novidades em ' . $notificationsSize 
+                    . ' topicos: <strong>' . $topicos . '</strong>'), 'alerts/success');
+            }
+        }
+        
+        $this->Notificacao->deleteAll(array('Notificacao.usuario_id' => $this->Auth->user('id')), false);
     }
 
     /**
@@ -35,12 +76,8 @@ class PerguntasController extends AppController {
             ));
             $this->set('search', $search);
         }
+        
         $this->Pergunta->recursive = 0;
-        /* $perguntas = array();
-          foreach ($this->paginate() as $pergunta){
-          $perguntas[] = Sanitize::clean($pergunta, array('escape' => false));
-          }
-          $this->set('perguntas', $perguntas); */
         $this->set('perguntas', $this->paginate());
     }
 
@@ -88,13 +125,13 @@ class PerguntasController extends AppController {
         $respostas = array();
         foreach ($this->paginate('Resposta') as $resposta) {
             $expertise = trim(str_replace(' ', '-', $this->Pergunta->Topico->find('first', array('conditions' =>
-                                array('Topico.id' => $resposta['Pergunta']['topico_id'])))['Tema']['nome']));
+                                array('Topico.id' => $resposta['Pergunta']['topico_id'])))['Topico']['nome']));
            
             ////Conexão com CODI-Service (Criando Degree)
             $HttpSocket = new HttpSocket();
             $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree', 'userId=' . $resposta['Usuario']['facebook_id'] .
                     '&expertise=' . $expertise);
-
+            
             if ($results->isOK()) {
                 $resposta['Resposta']['score'] = $results->body;
                 $respostas[] = $resposta;
@@ -103,7 +140,7 @@ class PerguntasController extends AppController {
                 $respostas[] = $resposta;
             }
         }
-        
+       
         foreach ($respostas as $temp)
             $temps[] = $temp['Resposta']['score'];
         
@@ -124,7 +161,7 @@ class PerguntasController extends AppController {
             if ($this->Pergunta->save($this->request->data)) {
                 $grupoId = $this->Pergunta->Topico->find('first', array('conditions' =>
                             array('Topico.id' => $this->request->data['Pergunta']['topico_id'])))['Tema']['grupo_id'];
-
+                
                 //Conexão com CODI-Service (Criando Preferencias)
                 $HttpSocket = new HttpSocket();
                 $HttpSocket->post('http://localhost:8080/Plugin-CODI/resources/preference/create', 
@@ -135,21 +172,46 @@ class PerguntasController extends AppController {
                         '&preferenceName=' . trim(str_replace(' ', '-', 
                                 $this->Pergunta->Topico->find('first', 
                                         array('conditions' => array('Topico.id' => 
-                                            $this->request->data['Pergunta']['topico_id'])))['Topico']['nome'])) .//corrigir
+                                            $this->request->data['Pergunta']['topico_id'])))['Topico']['nome'])) .
                         '&score=0');
 
                 //Conexão com CODI-Service (Adicinando o Usuario a um SubGrupo logico baseado em Preferencia)
-                $HttpSocket->put('http://localhost:8080/Plugin-CODI/resources/subgroup/user/add', //criar
+                $HttpSocket->put('http://localhost:8080/Plugin-CODI/resources/subgroup/user/add',
                         'userId=' . $this->Auth->user('facebook_id') .
                         '&subGroupName=' . trim(str_replace(' ', '-', 
                                 $this->Pergunta->Topico->find('first', 
                                         array('conditions' => array('Topico.id' => 
                                             $this->request->data['Pergunta']['topico_id'])))['Topico']['nome'])));
-
-                $this->Session->setFlash(__('The pergunta has been saved'), 'alerts/success');
+                
+                //Notificando os Usuarios do SubGrupo logico
+                $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/users/group/'
+                        . trim(str_replace(' ', '-', $this->Pergunta->Topico->find('first', 
+                                        array('conditions' => array('Topico.id' => 
+                                            $this->request->data['Pergunta']['topico_id'])))['Topico']['nome'])));
+                
+                if ($results->isOk()) {
+                    $results = json_decode($results->body);
+                    foreach ($results as $result) {
+                        if ($result != $this->Auth->user('facebook_id')) {
+                            $user = $this->Pergunta->Usuario->findByFacebookId($result);
+                            //var_dump();die();
+                            $this->loadModel('Notificacao');
+                            $this->Notificacao->create();
+                            $this->Notificacao->save(array(
+                                'Notificacao' => array(
+                                'usuario_id' => $user['Usuario']['id'],
+                                'topico_id' => $this->request->data['Pergunta']['topico_id']
+                                )
+                            ));
+                    
+                        }
+                    }
+                }
+                
+                $this->Session->setFlash(__('The question has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The pergunta could not be saved. Please, try again.'), 'alerts/error');
+                $this->Session->setFlash(__('The question could not be saved. Please, try again.'), 'alerts/error');
             }
         }
 

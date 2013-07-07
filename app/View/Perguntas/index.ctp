@@ -1,10 +1,10 @@
 <div class="perguntas index">
-    <h3><?php echo __('PERGUNTAS'); ?></h3>
+    <h3><?php echo __('Questions'); ?></h3>
     <table class="table table-striped table-hover table-bordered">
         <tr>
-            <th><?php echo $this->Paginator->sort('titulo'); ?></th>
-            <th><?php echo $this->Paginator->sort('usuario_id'); ?></th>
-            <th><?php echo $this->Paginator->sort('topico_id'); ?></th>
+            <th><?php echo $this->Paginator->sort('title'); ?></th>
+            <th><?php echo $this->Paginator->sort('user'); ?></th>
+            <th><?php echo $this->Paginator->sort('topic'); ?></th>
         </tr>
         <?php foreach ($perguntas as $pergunta): ?>
             <tr>

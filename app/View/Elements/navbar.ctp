@@ -31,7 +31,7 @@
                     $liClass = '';
                 endif;
                 ?>
-                <li <?php echo $liClass; ?>><?php echo $this->Html->link('Perguntar', array('controller' => 'perguntas', 'action' => 'add')); ?></li>
+                <li <?php echo $liClass; ?>><?php echo $this->Html->link('Ask', array('controller' => 'perguntas', 'action' => 'add')); ?></li>
             </ul>
             <?php endif; ?>
             
@@ -45,7 +45,7 @@
                         'class' => 'search-query',
                         'div' => false,
                         'label' => false,
-                        'placeholder' => 'Pesquisar',
+                        'placeholder' => 'Search',
                         'value' => isset($search) ? $search : '',
                         'autocomplete' => 'off',
                         'data-provide' => 'typeahead',
@@ -62,7 +62,7 @@
                 <?php if (!$isLogged): ?>
                 <a href="#" class="facebook_login_link"><img src="img/Login.png" style="height: 26px"/></a>
                 <?php else: ?>
-                    <span style="margin-right: 25px">Logado como: 
+                <span style="margin-right: 25px"><span style="font-size: 15px">Hi</span>,
                         <strong><?php echo AuthComponent::user('nome'); ?></strong></span>
                    
                         <?= $this->Html->link($this->Html->image('Logout.png',

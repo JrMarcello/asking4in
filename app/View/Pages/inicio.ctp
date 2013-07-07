@@ -49,7 +49,8 @@
         <div id="wrap">
             <div id="container" class="container-fluid">
                 <div id="content" class="row-fluid">
-                    <div id="banner"><center>BANNER</center>
+                    <div id="banner">
+                        <iframe src="http://files.bannersnack.com/iframe/embed.html?hash=btkiw53m&bgcolor=%23333333&wmode=opaque&t=1371096992" width="800" height="350" seamless="seamless" scrolling="no" frameborder="0" allowtransparency="true"></iframe>
                     </div>
                     <!--<div id="principal" class="span9">
                         <?php //echo $this->Session->flash(); ?>
@@ -66,7 +67,7 @@
                 <br/>
                 <center>
                     <span class="muted">
-                        © Copyright 2013 - <strong>SIDE Search Group</strong> - Criado usando 
+                        © Copyright 2013 - <strong>SIDE Search Group</strong> - Created using 
                         <?php echo $this->Html->link('CakePHP ', 'http://cakephp.org', 
                                 array('target' => '_blank'))?> 2.3.0
                     </span>

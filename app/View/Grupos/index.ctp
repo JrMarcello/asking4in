@@ -1,5 +1,5 @@
 <div class="grupos index">
-	<h2><?php echo __('Grupos'); ?></h2>
+	<h2><?php echo __('Groups'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>

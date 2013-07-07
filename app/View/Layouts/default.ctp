@@ -47,7 +47,7 @@
                 <br/>
                 <center>
                     <span class="muted">
-                        © Copyright 2013 - <strong>SIDE Search Group</strong> - Criado usando 
+                        © Copyright 2013 - <strong>SIDE Search Group</strong> - Created using 
                         <?php echo $this->Html->link('CakePHP ', 'http://cakephp.org', 
                                 array('target' => '_blank'))?> 2.3.0
                     </span>
