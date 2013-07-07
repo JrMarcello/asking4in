@@ -1,22 +1,22 @@
 <div class="topicos view">
-<h2><?php  echo __('Topico'); ?></h2>
+<h2><?php  echo __('Topic'); ?></h2>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>
 			<?php echo h($topico['Topico']['id']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Descricao'); ?></dt>
+		<dt><?php echo __('Description'); ?></dt>
 		<dd>
 			<?php echo h($topico['Topico']['descricao']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Nome'); ?></dt>
+		<dt><?php echo __('Name'); ?></dt>
 		<dd>
 			<?php echo h($topico['Topico']['nome']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Tema'); ?></dt>
+		<dt><?php echo __('Theme'); ?></dt>
 		<dd>
 			<?php echo $this->Html->link($topico['Tema']['nome'], array('controller' => 'temas', 'action' => 'view', $topico['Tema']['id'])); ?>
 			&nbsp;
@@ -26,18 +26,18 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('Edit Topico'), array('action' => 'edit', $topico['Topico']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Topico'), array('action' => 'delete', $topico['Topico']['id']), null, __('Are you sure you want to delete # %s?', $topico['Topico']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Topicos'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Topico'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Temas'), array('controller' => 'temas', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Tema'), array('controller' => 'temas', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Perguntas'), array('controller' => 'perguntas', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Pergunta'), array('controller' => 'perguntas', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Edit Topic'), array('action' => 'edit', $topico['Topico']['id'])); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Delete Topic'), array('action' => 'delete', $topico['Topico']['id']), null, __('Are you sure you want to delete # %s?', $topico['Topico']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('List Topics'), array('action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Topic'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Themes'), array('controller' => 'temas', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Theme'), array('controller' => 'temas', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Questions'), array('controller' => 'perguntas', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Question'), array('controller' => 'perguntas', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Perguntas'); ?></h3>
+	<h3><?php echo __('Related Questions'); ?></h3>
 	<?php if (!empty($topico['Pergunta'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
@@ -67,7 +67,7 @@
 
 	<div class="actions">
 		<ul>
-			<li><?php echo $this->Html->link(__('New Pergunta'), array('controller' => 'perguntas', 'action' => 'add')); ?> </li>
+			<li><?php echo $this->Html->link(__('New Question'), array('controller' => 'perguntas', 'action' => 'add')); ?> </li>
 		</ul>
 	</div>
 </div>

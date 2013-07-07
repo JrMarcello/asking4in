@@ -1,11 +1,11 @@
-<h4>RECENT GROUPS</h4>
+<h4><?php echo __('RECENT GROUPS') ?></h4>
 <ul class="nav nav-list" id="side-menu" >
     <?php foreach ($gruposSidebar as $grupo): ?>
-    <li class="nav-header" ><?php echo $grupo['Grupo']['nome']; ?></li>
+    <li class="nav-header" ><?php echo __($grupo['Grupo']['nome']); ?></li>
         <?php foreach ($grupo['Tema'] as $tema): ?>
         <li class="fsize" style="margin-left: 10px;">
             <?php echo $this->Html->link(
-                    $tema['nome'],
+                    __($tema['nome']),
                     array('controller' => 'temas', 'action' => 'view', $tema['id'])
             ) ?>
         </li>

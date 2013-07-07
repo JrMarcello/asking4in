@@ -1,7 +1,7 @@
 <div class="respostas form">
     <?php echo $this->Form->create('Resposta'); ?>
     <fieldset>
-        <legend><?php echo __('Add Resposta'); ?></legend>
+        <legend><?php echo __('Add answer'); ?></legend>
         <?php
         echo $this->Form->input('conteudo');
         echo $this->Form->input('score');

@@ -67,7 +67,7 @@ class UsuariosController extends AppController {
                     )['user_id'];
 
             if ($facebook_id != $facebook_id_check) {
-                $this->Session->setFlash('Login Fail', 'alerts/error');
+                $this->Session->setFlash(__('Login Fail', 'alerts/error'));
                 $this->redirect('/');
             }
 
@@ -185,7 +185,7 @@ class UsuariosController extends AppController {
      */
     public function admin_view($id = null) {
         if (!$this->Usuario->exists($id)) {
-            throw new NotFoundException(__('Invalid usuario'));
+            throw new NotFoundException(__('Invalid user'));
         }
         $options = array('conditions' => array('Usuario.' . $this->Usuario->primaryKey => $id));
         $this->set('usuario', $this->Usuario->find('first', $options));
@@ -200,10 +200,10 @@ class UsuariosController extends AppController {
         if ($this->request->is('post')) {
             $this->Usuario->create();
             if ($this->Usuario->save($this->request->data)) {
-                $this->Session->setFlash(__('The usuario has been saved'));
+                $this->Session->setFlash(__('The user has been saved'));
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The usuario could not be saved. Please, try again.'));
+                $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
             }
         }
         $grupos = $this->Usuario->Grupo->find('list');
@@ -219,14 +219,14 @@ class UsuariosController extends AppController {
      */
     public function admin_edit($id = null) {
         if (!$this->Usuario->exists($id)) {
-            throw new NotFoundException(__('Invalid usuario'));
+            throw new NotFoundException(__('Invalid user'));
         }
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Usuario->save($this->request->data)) {
-                $this->Session->setFlash(__('The usuario has been saved'));
+                $this->Session->setFlash(__('The user has been saved'));
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The usuario could not be saved. Please, try again.'));
+                $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
             }
         } else {
             $options = array('conditions' => array('Usuario.' . $this->Usuario->primaryKey => $id));
@@ -247,14 +247,14 @@ class UsuariosController extends AppController {
     public function admin_delete($id = null) {
         $this->Usuario->id = $id;
         if (!$this->Usuario->exists()) {
-            throw new NotFoundException(__('Invalid usuario'));
+            throw new NotFoundException(__('Invalid user'));
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->Usuario->delete()) {
-            $this->Session->setFlash(__('Usuario deleted'));
+            $this->Session->setFlash(__('User deleted'));
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Usuario was not deleted'));
+        $this->Session->setFlash(__('User was not deleted'));
         $this->redirect(array('action' => 'index'));
     }
 

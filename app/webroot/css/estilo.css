@@ -42,6 +42,11 @@
 	border-radius: 0em;
 }
 
+.ask_btn{
+    font-size: 18px;
+    font-weight: bolder;
+}
+
 /*------------------------------
 Formulários
 ------------------------------*/

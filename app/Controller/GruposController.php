@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+
 /**
  * Grupos Controller
  *
@@ -26,7 +27,7 @@ class GruposController extends AppController {
  */
 	public function view($id = null) {
 		if (!$this->Grupo->exists($id)) {
-			throw new NotFoundException(__('Invalid grupo'));
+			throw new NotFoundException(__('Invalid gruop'));
 		}
 		$options = array('conditions' => array('Grupo.' . $this->Grupo->primaryKey => $id));
 		$this->Grupo->contain();
@@ -49,10 +50,10 @@ class GruposController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Grupo->create();
 			if ($this->Grupo->save($this->request->data)) {
-				$this->Session->setFlash(__('The grupo has been saved'));
+				$this->Session->setFlash(__('The group has been saved'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The grupo could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The group could not be saved. Please, try again.'));
 			}
 		}
 		$usuarios = $this->Grupo->Usuario->find('list');
@@ -68,14 +69,14 @@ class GruposController extends AppController {
  */
 	public function edit($id = null) {
 		if (!$this->Grupo->exists($id)) {
-			throw new NotFoundException(__('Invalid grupo'));
+			throw new NotFoundException(__('Invalid group'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Grupo->save($this->request->data)) {
-				$this->Session->setFlash(__('The grupo has been saved'));
+				$this->Session->setFlash(__('The group has been saved'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The grupo could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The group could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Grupo.' . $this->Grupo->primaryKey => $id));
@@ -96,14 +97,14 @@ class GruposController extends AppController {
 	public function delete($id = null) {
 		$this->Grupo->id = $id;
 		if (!$this->Grupo->exists()) {
-			throw new NotFoundException(__('Invalid grupo'));
+			throw new NotFoundException(__('Invalid group'));
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Grupo->delete()) {
-			$this->Session->setFlash(__('Grupo deleted'));
+			$this->Session->setFlash(__('Group deleted'));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('Grupo was not deleted'));
+		$this->Session->setFlash(__('Group was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
 }

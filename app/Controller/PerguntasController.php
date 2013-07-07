@@ -2,7 +2,6 @@
 
 App::uses('AppController', 'Controller');
 App::uses('HttpSocket', 'Network/Http');
-//App::uses('Sanitize', 'Utility');
 
 /**
  * Perguntas Controller
@@ -24,10 +23,11 @@ class PerguntasController extends AppController {
         $this->loadModel('Notificacao');
         $notifications = $this->Notificacao->find('all', array(
             'conditions' => array('Notificacao.usuario_id' => $this->Auth->user('id'))));
-        //var_dump($notifications);die();
+        
         $topicos = '';
         $cont = 1;
         $notificationsSize = sizeof($notifications);
+        
         if ($notifications != null & !empty($notifications)){
             foreach ($notifications as $notification){
                 if ($cont != ($notificationsSize) && $cont == ($notificationsSize - 1)){
@@ -44,13 +44,13 @@ class PerguntasController extends AppController {
             }
             
             if($notificationsSize == 1){
-                $this->Session->setFlash(__('Olá, <strong>'. $this->Auth->user('nome') 
-                    .'</strong>... Você tem novidades em 1 topico: <strong>' 
+                $this->Session->setFlash(__('Hi, <strong>'. $this->Auth->user('nome') 
+                    .'</strong>... You have news in 1 topic: <strong>' 
                     . $topicos . '</strong>'), 'alerts/success');
             }
             else{
                 $this->Session->setFlash(__('Olá, <strong>'. $this->Auth->user('nome') 
-                    .'</strong>... Você tem novidades em ' . $notificationsSize 
+                    .'</strong>... You have news in ' . $notificationsSize 
                     . ' topicos: <strong>' . $topicos . '</strong>'), 'alerts/success');
             }
         }
@@ -107,7 +107,7 @@ class PerguntasController extends AppController {
      */
     public function view($id = null) {
         if (!$this->Pergunta->exists($id)) {
-            throw new NotFoundException(__('Invalid pergunta'));
+            throw new NotFoundException(__('Invalid question'));
         }
 
         $options = array(
@@ -129,7 +129,8 @@ class PerguntasController extends AppController {
            
             ////Conexão com CODI-Service (Criando Degree)
             $HttpSocket = new HttpSocket();
-            $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree', 'userId=' . $resposta['Usuario']['facebook_id'] .
+            $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree', 
+                    'userId=' . $resposta['Usuario']['facebook_id'] .
                     '&expertise=' . $expertise);
             
             if ($results->isOK()) {
@@ -194,7 +195,7 @@ class PerguntasController extends AppController {
                     foreach ($results as $result) {
                         if ($result != $this->Auth->user('facebook_id')) {
                             $user = $this->Pergunta->Usuario->findByFacebookId($result);
-                            //var_dump();die();
+                            
                             $this->loadModel('Notificacao');
                             $this->Notificacao->create();
                             $this->Notificacao->save(array(
@@ -256,14 +257,14 @@ class PerguntasController extends AppController {
      */
     public function edit($id = null) {
         if (!$this->Pergunta->exists($id)) {
-            throw new NotFoundException(__('Invalid pergunta'));
+            throw new NotFoundException(__('Invalid question'));
         }
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Pergunta->save($this->request->data)) {
-                $this->Session->setFlash(__('The pergunta has been saved', 'alerts/success'));
+                $this->Session->setFlash(__('The question has been saved', 'alerts/success'));
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The pergunta could not be saved. Please, try again.'), 'alerts/error');
+                $this->Session->setFlash(__('The question could not be saved. Please, try again.'), 'alerts/error');
             }
         } else {
             $options = array('conditions' => array('Pergunta.' . $this->Pergunta->primaryKey => $id));
@@ -285,14 +286,14 @@ class PerguntasController extends AppController {
     public function delete($id = null) {
         $this->Pergunta->id = $id;
         if (!$this->Pergunta->exists()) {
-            throw new NotFoundException(__('Invalid pergunta'));
+            throw new NotFoundException(__('Invalid question'));
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->Pergunta->delete()) {
-            $this->Session->setFlash(__('Pergunta deleted'), 'alerts/success');
+            $this->Session->setFlash(__('Question deleted'), 'alerts/success');
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Pergunta was not deleted'), 'alerts/error');
+        $this->Session->setFlash(__('Question was not deleted'), 'alerts/error');
         $this->redirect(array('action' => 'index'));
     }
 

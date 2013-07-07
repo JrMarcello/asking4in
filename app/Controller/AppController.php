@@ -48,9 +48,7 @@ class AppController extends Controller {
             ),
             //'authorize' => 'Controller'
         ),
-        //'Facebook.Connect' => array('model' => 'Usuario')
     );
-    //public $helpers = array('Facebook.Facebook');
     
     public function isAuthorized($user = null) {
         return true;
@@ -73,17 +71,5 @@ class AppController extends Controller {
 		
         $this->set('isLogged', $this->Auth->loggedIn());
     }
-    
-//    public function beforeFacebookSave() {
-//        $this->Connect->authUser['Usuario']['email'] = $this->Connect->user('email');
-//        $this->Connect->authUser['Usuario']['nome'] = $this->Connect->user('name');
-//        
-//        return true;
-//    }
-//    
-//    public function afterFacebookLogin() {
-//        $user_groups = FB::api('/me/groups');
-//        $this->Session->write('FB.user_groups', $user_groups['data']);
-//    }
 
 }

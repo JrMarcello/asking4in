@@ -17,12 +17,17 @@ class NotificacaosController extends AppController {
      */
     public function add($usuario_id, $topico_id) {
         $this->Notificacao->create();
-        $this->Notificacao->save(array(
+        if($this->Notificacao->save(array(
                     'Notificacao' => array(
                         'usuario_id' => $usuario_id,
                         'topico_id' => $topico_id
                     )
-                ));
+                ))){
+        
+            $this->Session->setFlash(__('The notification has been saved'));
+        }else{
+            $this->Session->setFlash(__('The notification could not be saved. Please, try again.'));
+        }
     }  
 
     /**
@@ -35,12 +40,10 @@ class NotificacaosController extends AppController {
     public function delete($id = null) {
         $this->Notificacao->id = $id;
         if (!$this->Notificacao->exists()) {
-            throw new NotFoundException(__('Invalid notificatios'));
+            throw new NotFoundException(__('Invalid notification'));
         }
-        
         //$this->request->onlyAllow('post', 'delete');
         $this->Notificacao->delete();
-        
     }
 
 }

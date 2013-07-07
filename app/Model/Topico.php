@@ -32,7 +32,7 @@ class Topico extends AppModel {
 			),
             'unique' => array(
                 'rule' => 'isUnique',
-                'message' => 'Nome do tópico deve ser único',
+                'message' => '__("Topic name must be unique")',
             )
 		),
 		'tema_id' => array(

@@ -29,7 +29,7 @@ class RespostasController extends AppController {
      */
     public function view($id = null) {
         if (!$this->Resposta->exists($id)) {
-            throw new NotFoundException(__('Invalid resposta'));
+            throw new NotFoundException(__('Invalid answer'));
         }
         $options = array('conditions' => array('Resposta.' . $this->Resposta->primaryKey => $id));
         $this->set('resposta', $this->Resposta->find('first', $options));
@@ -52,9 +52,9 @@ class RespostasController extends AppController {
                             array('Pergunta.id' => $this->request->data['Resposta']['pergunta_id'])))['Topico']['nome'])) .
                         '&score=' . $this->request->data['Resposta']['expertiseLevel']);
 
-                $this->Session->setFlash(__('Sua resposta foi enviada.'), 'alerts/success');
+                $this->Session->setFlash(__('Your answer has been sent.'), 'alerts/success');
             } else {
-                $this->Session->setFlash(__('A resposta não pode ser enviada.'), 'alerts/error');
+                $this->Session->setFlash(__('The answer could not be sent. Please, try again.'), 'alerts/error');
             }
         }
         $this->redirect(array(
@@ -73,14 +73,14 @@ class RespostasController extends AppController {
      */
     public function edit($id = null) {
         if (!$this->Resposta->exists($id)) {
-            throw new NotFoundException(__('Invalid resposta'));
+            throw new NotFoundException(__('Invalid answer'));
         }
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Resposta->save($this->request->data)) {
-                $this->Session->setFlash(__('The resposta has been saved'), 'alerts/success');
+                $this->Session->setFlash(__('The answer has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The resposta could not be saved. Please, try again.'), 'alerts/error');
+                $this->Session->setFlash(__('The answer could not be saved. Please, try again.'), 'alerts/error');
             }
         } else {
             $options = array('conditions' => array('Resposta.' . $this->Resposta->primaryKey => $id));
@@ -102,14 +102,14 @@ class RespostasController extends AppController {
     public function delete($id = null) {
         $this->Resposta->id = $id;
         if (!$this->Resposta->exists()) {
-            throw new NotFoundException(__('Invalid resposta'));
+            throw new NotFoundException(__('Invalid answer'));
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->Resposta->delete()) {
-            $this->Session->setFlash(__('Resposta deleted'), 'alerts/success');
+            $this->Session->setFlash(__('Answer deleted'), 'alerts/success');
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Resposta was not deleted'), 'alerts/error');
+        $this->Session->setFlash(__('Answer was not deleted'), 'alerts/error');
         $this->redirect(array('action' => 'index'));
     }
 

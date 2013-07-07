@@ -28,7 +28,7 @@ class TopicosController extends AppController {
      */
     public function view($id = null) {
         if (!$this->Topico->exists($id)) {
-            throw new NotFoundException(__('Invalid topico'));
+            throw new NotFoundException(__('Invalid topic'));
         }
         $options = array(
             'conditions' => array('Topico.id' => $id),
@@ -55,10 +55,10 @@ class TopicosController extends AppController {
         if ($this->request->is('post')) {
             $this->Topico->create();
             if ($this->Topico->save($this->request->data)) {
-                $this->Session->setFlash(__('The topico has been saved'), 'alerts/success');
+                $this->Session->setFlash(__('The topic has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'), 'alerts/error');
+                $this->Session->setFlash(__('The topic could not be saved. Please, try again.'), 'alerts/error');
             }
         }
         $temas = $this->Topico->Tema->find('list');
@@ -74,14 +74,14 @@ class TopicosController extends AppController {
      */
     public function edit($id = null) {
         if (!$this->Topico->exists($id)) {
-            throw new NotFoundException(__('Invalid topico'));
+            throw new NotFoundException(__('Invalid topic'));
         }
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Topico->save($this->request->data)) {
-                $this->Session->setFlash(__('The topico has been saved'), 'alerts/success');
+                $this->Session->setFlash(__('The topic has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'), 'alerts/error');
+                $this->Session->setFlash(__('The topic could not be saved. Please, try again.'), 'alerts/error');
             }
         } else {
             $options = array('conditions' => array('Topico.' . $this->Topico->primaryKey => $id));
@@ -102,14 +102,14 @@ class TopicosController extends AppController {
     public function delete($id = null) {
         $this->Topico->id = $id;
         if (!$this->Topico->exists()) {
-            throw new NotFoundException(__('Invalid topico'));
+            throw new NotFoundException(__('Invalid topic'));
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->Topico->delete()) {
-            $this->Session->setFlash(__('Topico deleted'), 'alerts/success');
+            $this->Session->setFlash(__('Topic deleted'), 'alerts/success');
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Topico was not deleted'), 'alerts/error');
+        $this->Session->setFlash(__('Topic was not deleted'), 'alerts/error');
         $this->redirect(array('action' => 'index'));
     }
 
@@ -132,7 +132,7 @@ class TopicosController extends AppController {
      */
     public function admin_view($id = null) {
         if (!$this->Topico->exists($id)) {
-            throw new NotFoundException(__('Invalid topico'));
+            throw new NotFoundException(__('Invalid topic'));
         }
         $options = array('conditions' => array('Topico.' . $this->Topico->primaryKey => $id));
         $this->set('topico', $this->Topico->find('first', $options));
@@ -147,10 +147,10 @@ class TopicosController extends AppController {
         if ($this->request->is('post')) {
             $this->Topico->create();
             if ($this->Topico->save($this->request->data)) {
-                $this->Session->setFlash(__('The topico has been saved'), 'alerts/success');
+                $this->Session->setFlash(__('The topic has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'), 'alerts/error');
+                $this->Session->setFlash(__('The topic could not be saved. Please, try again.'), 'alerts/error');
             }
         }
         $temas = $this->Topico->Tema->find('list');
@@ -166,14 +166,14 @@ class TopicosController extends AppController {
      */
     public function admin_edit($id = null) {
         if (!$this->Topico->exists($id)) {
-            throw new NotFoundException(__('Invalid topico'));
+            throw new NotFoundException(__('Invalid topic'));
         }
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Topico->save($this->request->data)) {
-                $this->Session->setFlash(__('The topico has been saved'), 'alerts/success');
+                $this->Session->setFlash(__('The topic has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The topico could not be saved. Please, try again.'), 'alerts/error');
+                $this->Session->setFlash(__('The topic could not be saved. Please, try again.'), 'alerts/error');
             }
         } else {
             $options = array('conditions' => array('Topico.' . $this->Topico->primaryKey => $id));
@@ -194,14 +194,14 @@ class TopicosController extends AppController {
     public function admin_delete($id = null) {
         $this->Topico->id = $id;
         if (!$this->Topico->exists()) {
-            throw new NotFoundException(__('Invalid topico'));
+            throw new NotFoundException(__('Invalid topic'));
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->Topico->delete()) {
-            $this->Session->setFlash(__('Topico deleted'), 'alerts/success');
+            $this->Session->setFlash(__('Topic deleted'), 'alerts/success');
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash(__('Topico was not deleted'), 'alerts/error');
+        $this->Session->setFlash(__('Topic was not deleted'), 'alerts/error');
         $this->redirect(array('action' => 'index'));
     }
 
