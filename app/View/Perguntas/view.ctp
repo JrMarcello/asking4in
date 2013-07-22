@@ -1,3 +1,11 @@
+<?php if ($fbPostResp): ?>
+        <script>
+            doCommentInPost('<?php echo $fbPostResp['postID'] ?>',
+                            '<?php echo $fbPostResp['respID'] ?>',
+                            '<?php echo $fbPostResp['comentario'] ?>');
+        </script>
+<?php endif; ?>
+        
 <div class="perguntas view">
     <h3><?php echo h($pergunta['Pergunta']['titulo']); ?></h3>
     <p><?php echo h($pergunta['Pergunta']['conteudo']); ?></p>

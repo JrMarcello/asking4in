@@ -31,8 +31,9 @@ class RespostasController extends AppController {
         if (!$this->Resposta->exists($id)) {
             throw new NotFoundException(__('Invalid answer'));
         }
+        
         $options = array('conditions' => array('Resposta.' . $this->Resposta->primaryKey => $id));
-        $this->set('resposta', $this->Resposta->find('first', $options));
+        $this->set('resposta', $this->Resposta->find('first', $options));  
     }
 
     /**
@@ -51,7 +52,14 @@ class RespostasController extends AppController {
                         '&expertise=' . trim(str_replace(' ', '-', $this->Resposta->Pergunta->find('first', array('conditions' =>
                             array('Pergunta.id' => $this->request->data['Resposta']['pergunta_id'])))['Topico']['nome'])) .
                         '&score=' . $this->request->data['Resposta']['expertiseLevel']);
-
+                
+                $respostPost = array('postID' => $this->Resposta->Pergunta->find('first', array('conditions' => 
+                            array('Pergunta.id' => $this->request->data['Resposta']['pergunta_id'])))['Pergunta']['facebook_id'],
+                                     'respID' => $this->Resposta->id,
+                                     'comentario' => $this->request->data['Resposta']['conteudo']);
+                
+                $this->Session->write('fbPostResp', $respostPost);
+                
                 $this->Session->setFlash(__('Your answer has been sent.'), 'alerts/success');
             } else {
                 $this->Session->setFlash(__('The answer could not be sent. Please, try again.'), 'alerts/error');
@@ -112,5 +120,17 @@ class RespostasController extends AppController {
         $this->Session->setFlash(__('Answer was not deleted'), 'alerts/error');
         $this->redirect(array('action' => 'index'));
     }
+    
+    
+    public function updatefbid() {
+         if ($this->request->is('ajax')) {
+            $this->layout = 'ajax';
+            $this->autoRender = false;
+            
+            $this->Resposta->id = $this->request->data['respid'];
+            $this->Resposta->saveField('facebook_id', $this->request->data['fbid']);
+            
+         }
+     }
 
 }

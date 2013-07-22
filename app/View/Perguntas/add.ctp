@@ -11,5 +11,5 @@
                 array('options' => $expertises, 'default' => '1'));*/
         ?>
     </fieldset>
-    <?php echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn btn-primary')); ?>
+    <?php echo $this->Form->end(array('label' => __('Submit'), 'class' => 'btn btn-primary addQuestion')); ?>
 </div>

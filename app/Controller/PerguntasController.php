@@ -10,8 +10,9 @@ App::uses('HttpSocket', 'Network/Http');
  */
 class PerguntasController extends AppController {
     public $notifications = null;
-    public $paginate = array('limit' => 10);
+    public $paginate = array('limit' => 10, 'order' => 'Pergunta.created DESC');
     public $components = array('RequestHandler');
+    //var $helpers = array('Html','Ajax','Javascript');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -77,6 +78,13 @@ class PerguntasController extends AppController {
             $this->set('search', $search);
         }
         
+        if($this->Session->check('fbPostPerg')){
+            $this->set('fbPostPerg', $this->Session->read('fbPostPerg'));
+            $this->Session->delete('fbPostPerg');
+        }else {
+            $this->set('fbPostPerg', false);
+        }
+        
         $this->Pergunta->recursive = 0;
         $this->set('perguntas', $this->paginate());
     }
@@ -109,6 +117,13 @@ class PerguntasController extends AppController {
         if (!$this->Pergunta->exists($id)) {
             throw new NotFoundException(__('Invalid question'));
         }
+        
+        if($this->Session->check('fbPostResp')){
+            $this->set('fbPostResp', $this->Session->read('fbPostResp'));
+            $this->Session->delete('fbPostResp');
+        }  else {
+            $this->set('fbPostResp', false);
+        }
 
         $options = array(
             'conditions' => array('Pergunta.' . $this->Pergunta->primaryKey => $id),
@@ -127,19 +142,28 @@ class PerguntasController extends AppController {
             $expertise = trim(str_replace(' ', '-', $this->Pergunta->Topico->find('first', array('conditions' =>
                                 array('Topico.id' => $resposta['Pergunta']['topico_id'])))['Topico']['nome']));
            
-            ////Conexão com CODI-Service (Criando Degree)
+            //Conexão com CODI-Service (Pegando Degree)
             $HttpSocket = new HttpSocket();
             $results = $HttpSocket->get('http://localhost:8080/Plugin-CODI/resources/degree', 
                     'userId=' . $resposta['Usuario']['facebook_id'] .
                     '&expertise=' . $expertise);
             
+            $degree = 0;
             if ($results->isOK()) {
-                $resposta['Resposta']['score'] = $results->body;
-                $respostas[] = $resposta;
-            } else {
-                $resposta['Resposta']['score'] = '0';
-                $respostas[] = $resposta;
+                $degree = $results->body;
             }
+            
+            /*$fbLikes = 0;
+            $this->set('goFbLikes', true);
+            if($this->Session->check('fbLikes')){
+                $fbLikes = $this->Session->read('fbLikes');
+                var_dump($fbLikes);die();
+                $this->Session->delete('fbLikes');
+            }*/
+            
+            $score =  $degree; //role entra na conta ? ((nunLikes * degree) / rolePeso) : (nunLikes * degree)
+            $resposta['Resposta']['score'] = $score;
+            $respostas[] = $resposta;   
         }
        
         foreach ($respostas as $temp)
@@ -158,8 +182,9 @@ class PerguntasController extends AppController {
      */
     public function add() {
         if ($this->request->is('post')) {
+            $grupoId = "";
             $this->Pergunta->create();
-            if ($this->Pergunta->save($this->request->data)) {
+            if ($this->Pergunta->save($this->request->data)) { 
                 $grupoId = $this->Pergunta->Topico->find('first', array('conditions' =>
                             array('Topico.id' => $this->request->data['Pergunta']['topico_id'])))['Tema']['grupo_id'];
                 
@@ -209,6 +234,19 @@ class PerguntasController extends AppController {
                     }
                 }
                 
+                //
+                $perguntaPost = array('grupoID' => $this->Pergunta->Topico->Tema->Grupo->find('first', 
+                                        array('conditions' => array('Grupo.id' => 
+                                            $grupoId)))['Grupo']['facebook_id'],
+                                      'perguntaID' => $this->Pergunta->id,
+                                      'topico' => trim(str_replace(' ', '',$this->Pergunta->Topico->find('first', 
+                                              array('conditions' => array('Topico.id' => 
+                                                  $this->request->data['Pergunta']['topico_id'])))['Topico']['nome'])),
+                                      'titulo' => $this->request->data['Pergunta']['titulo'],
+                                      'conteudo' => $this->request->data['Pergunta']['conteudo']);
+                
+                $this->Session->write('fbPostPerg', $perguntaPost);
+                
                 $this->Session->setFlash(__('The question has been saved'), 'alerts/success');
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -246,6 +284,8 @@ class PerguntasController extends AppController {
         ));
 
         $this->set(compact('usuarios', 'topicos'));
+        
+        
     }
 
     /**
@@ -296,5 +336,27 @@ class PerguntasController extends AppController {
         $this->Session->setFlash(__('Question was not deleted'), 'alerts/error');
         $this->redirect(array('action' => 'index'));
     }
+    
+    
+     public function updatefbid() {
+         if ($this->request->is('ajax')) {
+            $this->layout = 'ajax';
+            $this->autoRender = false;
+            
+            $this->Pergunta->id = $this->request->data['pgid'];
+            $this->Pergunta->saveField('facebook_id', $this->request->data['fbid']);
+            
+         }
+     }
+     
+     /*public function setnumlikes() {
+         if ($this->request->is('ajax')) {
+            $this->layout = 'ajax';
+            $this->autoRender = false;
+            //var_dump($this->request->data['fblikes']);die();
+            $this->Session->write('fblikes', $this->request->data['fblikes']);
+            
+         }
+     }*/
 
 }

@@ -1,3 +1,13 @@
+<?php if ($fbPostPerg): ?>
+        <script>
+            postQuestionInGroup('<?php echo $fbPostPerg['grupoID'] ?>',
+                                '<?php echo $fbPostPerg['perguntaID'] ?>',
+                                '<?php echo $fbPostPerg['topico'] ?>',
+                                '<?php echo $fbPostPerg['titulo'] ?>', 
+                                '<?php echo $fbPostPerg['conteudo'] ?>');
+        </script>
+<?php endif; ?>
+        
 <div class="perguntas index">
     <h3><?php echo __('Questions'); ?></h3>
     <table class="table table-striped table-hover table-bordered">
